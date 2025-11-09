@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="space_between|end">
+            android:gravity="end|center_vertical">
 
             <TextView
                 android:id="@+id/tv_reserva_precio"
@@ -89,7 +89,7 @@
                 android:contentDescription="Eliminar"
                 android:padding="4dp"
                 android:src="@android:drawable/ic_menu_delete"
-                android:tint="#E53935" />
+                app:tint="#E53935" />
         </LinearLayout>
 
     </LinearLayout>
