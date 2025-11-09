@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/top_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -69,7 +69,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Confirma tus reserva"
+                android:text="Confirma tu reserva"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="#1C1C1E" />
@@ -88,6 +88,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
+                    <!-- Item 1 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -125,6 +126,7 @@
                         android:background="#E0E0E0"
                         android:layout_marginVertical="12dp" />
 
+                    <!-- Item 2 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -162,6 +164,7 @@
                         android:background="#E0E0E0"
                         android:layout_marginVertical="12dp" />
 
+                    <!-- Item 3 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -199,6 +202,7 @@
                         android:background="#E0E0E0"
                         android:layout_marginVertical="12dp" />
 
+                    <!-- Total -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -214,6 +218,7 @@
                             android:textColor="#1C1C1E" />
 
                         <TextView
+                            android:id="@+id/tv_total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="S/1940.00"
@@ -309,7 +314,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Numero de contacto"
+                        android:text="Número de contacto"
                         android:textSize="13sp"
                         android:textStyle="bold"
                         android:textColor="#333333" />
@@ -499,7 +504,7 @@
                 </androidx.cardview.widget.CardView>
             </GridLayout>
 
-            <!-- Resumen del pedido (compacto) -->
+            <!-- Resumen del pedido -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -522,6 +527,7 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
+                    <!-- items + total (compacto) -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -531,7 +537,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Machupicchu Full Day\n15 Oct 2025, Cusco, Peru"
+                            android:text="Machupicchu Full Day\n15 Oct 2025, Cusco, Perú"
                             android:textSize="13sp"
                             android:textColor="#333333" />
 
@@ -554,7 +560,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Valle Sagrado\n17 Oct 2025, Cusco, Peru"
+                            android:text="Valle Sagrado\n17 Oct 2025, Cusco, Perú"
                             android:textSize="13sp"
                             android:textColor="#333333" />
 
@@ -577,7 +583,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Salkantay 4D/3N\n17 Oct 2025, Cusco, Peru"
+                            android:text="Salkantay 4D/3N\n18 Oct 2025, Cusco, Perú"
                             android:textSize="13sp"
                             android:textColor="#333333" />
 
@@ -650,7 +656,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Al completar esta reserva, acepta nuestros Términos y condiciones y Política de privacidad."
+                android:text="Al completar esta reserva, aceptas nuestros Términos y condiciones y Política de privacidad."
                 android:textSize="11sp"
                 android:textColor="#999999"
                 android:gravity="center"
@@ -658,66 +664,17 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_bottom_nav"
-        android:layout_width="match_parent"
+    <!-- BottomNav custom -->
+    <com.proyecto.travelia.ui.BottomNavView
+        android:id="@+id/bottom_nav"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="#FFC107"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="5dp">
-
-            <LinearLayout
-                android:id="@+id/nav_home"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_home" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Home"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_explorar"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_explorar" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Explorar"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_add"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView
-                    style="@style/BottomNavIconStyle"
-                    android:layout_width="46dp"
-                    android:layout_height="41dp"
-                    android:src="@drawable/ic_add"
-                    app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="agregar"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_favorites"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_favoritos" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Favoritos"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_reserve"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_carrito" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Reservar"/>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:currentTab="reserve"
+        app:finishOnNavigate="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

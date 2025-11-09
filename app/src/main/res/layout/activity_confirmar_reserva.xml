@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@id/top_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -226,9 +226,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-
-
-
             <!-- Divisor -->
             <View
                 android:layout_width="match_parent"
@@ -276,70 +273,19 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-
     </androidx.core.widget.NestedScrollView>
 
-    <!-- BOTTOM NAV -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_bottom_nav"
+    <!-- BOTTOM NAV (Custom View) -->
+    <com.proyecto.travelia.ui.BottomNavView
+        android:id="@+id/bottom_nav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:background="#FFC107"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="5dp">
-
-            <LinearLayout
-                android:id="@+id/nav_home"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_home" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Home"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_explorar"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_explorar" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Explorar"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_add"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView
-                    style="@style/BottomNavIconStyle"
-                    android:layout_width="46dp"
-                    android:layout_height="41dp"
-                    android:src="@drawable/ic_add"
-                    app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="agregar"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_favorites"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_favoritos" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Favoritos"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nav_reserve"
-                style="@style/BottomNavLayoutItemStyle">
-                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_carrito" app:tint="@color/white"/>
-                <TextView style="@style/BottomNavTextStyle" android:text="Reservar"/>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        app:currentTab="reserve"
+        app:finishOnNavigate="true"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,14 @@
+<resources>
+    <declare-styleable name="BottomNavView">
+        <!-- Pestaña actual para resaltado -->
+        <attr name="currentTab" format="enum">
+            <enum name="home" value="0"/>
+            <enum name="explorar" value="1"/>
+            <enum name="add" value="2"/>
+            <enum name="favorites" value="3"/>
+            <enum name="reserve" value="4"/>
+        </attr>
+        <!-- Si true, hace finish() después de navegar -->
+        <attr name="finishOnNavigate" format="boolean"/>
+    </declare-styleable>
+</resources>

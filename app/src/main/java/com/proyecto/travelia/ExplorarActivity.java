@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.proyecto.travelia.data.FavoritesRepository;
 import com.proyecto.travelia.data.local.FavoriteEntity;
+import com.proyecto.travelia.ui.BottomNavView;
 
 import java.util.concurrent.Executors;
 
@@ -32,18 +33,26 @@ public class ExplorarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_explorar);
+
+        // Edge-to-edge: bottom lo maneja el BottomNav
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets sb = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(sb.left, sb.top, sb.right, sb.bottom);
+            v.setPadding(sb.left, sb.top, sb.right, 0);
             return insets;
         });
 
         favRepo = new FavoritesRepository(this);
 
-        setupBottomNav();
+        // BottomNav: acción especial para ADD (si quieres)
+        BottomNavView bottom = findViewById(R.id.bottom_nav);
+        if (bottom != null) {
+            bottom.setOnAddClickListener(v ->
+                    Toast.makeText(this, "Acción agregar (Explorar)", Toast.LENGTH_SHORT).show()
+            );
+            // bottom.setFinishOnNavigate(false); // si no quieres cerrar al navegar
+        }
 
         Spinner spOrden = findViewById(R.id.sp_orden);
         String[] opciones = new String[]{"Nombre", "Precio", "Rating", "Nuevos"};
@@ -60,39 +69,6 @@ public class ExplorarActivity extends AppCompatActivity {
 
         GridLayout grid = findViewById(R.id.grid_rutas);
         populateGridWithCards(grid);
-    }
-
-    private void setupBottomNav() {
-        LinearLayout navHome = findViewById(R.id.nav_home);
-        LinearLayout navExplorar = findViewById(R.id.nav_explorar);
-        LinearLayout navAdd = findViewById(R.id.nav_add);
-        LinearLayout navFavorites = findViewById(R.id.nav_favorites);
-        LinearLayout navReserve = findViewById(R.id.nav_reserve);
-
-        if (navHome != null) {
-            navHome.setOnClickListener(v -> {
-                startActivity(new Intent(ExplorarActivity.this, InicioActivity.class));
-                finish();
-            });
-        }
-        if (navExplorar != null) {
-            navExplorar.setOnClickListener(v ->
-                    Toast.makeText(this, "Ya estás en Explorar", Toast.LENGTH_SHORT).show());
-        }
-        if (navAdd != null) {
-            navAdd.setOnClickListener(v ->
-                    Toast.makeText(this, "Función agregar pendiente", Toast.LENGTH_SHORT).show());
-        }
-        if (navFavorites != null) {
-            navFavorites.setOnClickListener(v -> {
-                startActivity(new Intent(this, com.proyecto.travelia.favoritos.FavoritosActivity.class));
-                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-            });
-        }
-        if (navReserve != null) {
-            navReserve.setOnClickListener(v ->
-                    Toast.makeText(this, "Abrir reservas", Toast.LENGTH_SHORT).show());
-        }
     }
 
     private void populateGridWithCards(GridLayout container) {
@@ -131,13 +107,11 @@ public class ExplorarActivity extends AppCompatActivity {
             if (tvEst != null) tvEst.setText(d.estrellas);
             if (tvRat != null) tvRat.setText(d.ratingTxt);
 
-            // 🔹 FAVORITOS: cargar estado desde Room
             Executors.newSingleThreadExecutor().execute(() -> {
                 boolean isFav = favRepo.isFavoriteSync(d.id);
                 runOnUiThread(() -> ivFav.setSelected(isFav));
             });
 
-            // 🔸 Evento de favorito
             ivFav.setOnClickListener(v -> {
                 boolean nowSelected = !ivFav.isSelected();
                 ivFav.setSelected(nowSelected);
@@ -161,7 +135,6 @@ public class ExplorarActivity extends AppCompatActivity {
                 }
             });
 
-            // 🎯 Botón detalles
             if (btnDetalles != null) {
                 btnDetalles.setOnClickListener(v -> {
                     Intent intent = new Intent(ExplorarActivity.this, DetalleArticuloActivity.class);

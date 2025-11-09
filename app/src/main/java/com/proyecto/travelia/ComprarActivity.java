@@ -5,15 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.cardview.widget.CardView;
+
+import com.proyecto.travelia.ui.BottomNavView;
 
 public class ComprarActivity extends AppCompatActivity {
 
@@ -26,10 +31,19 @@ public class ComprarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_comprar);
+
+        // Edge-to-edge: el BottomNav maneja el margen inferior
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets sb = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(sb.left, sb.top, sb.right, 0);
+            return insets;
+        });
 
         initViews();
         setupSpinners();
+        setupBottomNav();
         setupListeners();
     }
 
@@ -57,6 +71,18 @@ public class ComprarActivity extends AppCompatActivity {
         spNacionalidad.setAdapter(paisesAdapter);
     }
 
+    private void setupBottomNav() {
+        BottomNavView bottom = findViewById(R.id.bottom_nav);
+        if (bottom != null) {
+            // Acción especial para ADD (opcional)
+            bottom.setOnAddClickListener(v ->
+                    Toast.makeText(this, "Acción agregar (Compra)", Toast.LENGTH_SHORT).show()
+            );
+            // Si no quieres cerrar esta Activity al cambiar de pestaña:
+            // bottom.setFinishOnNavigate(false);
+        }
+    }
+
     private void setupListeners() {
         // Método de pago - Débito/Crédito
         cardDebito.setOnClickListener(v -> {
@@ -66,7 +92,7 @@ public class ComprarActivity extends AppCompatActivity {
             mostrarDialogoTarjeta();
         });
 
-        // Método de pago - PayPal
+        // PayPal
         cardPaypal.setOnClickListener(v -> {
             metodoSeleccionado = "paypal";
             resetMetodosSeleccion();
@@ -74,7 +100,7 @@ public class ComprarActivity extends AppCompatActivity {
             Toast.makeText(this, "PayPal seleccionado", Toast.LENGTH_SHORT).show();
         });
 
-        // Método de pago - Transferencia
+        // Transferencia
         cardTransferencia.setOnClickListener(v -> {
             metodoSeleccionado = "transferencia";
             resetMetodosSeleccion();
@@ -82,7 +108,7 @@ public class ComprarActivity extends AppCompatActivity {
             Toast.makeText(this, "Transferencia seleccionada", Toast.LENGTH_SHORT).show();
         });
 
-        // Método de pago - Yape/Plin
+        // Yape/Plin
         cardYape.setOnClickListener(v -> {
             metodoSeleccionado = "yape";
             resetMetodosSeleccion();
@@ -92,9 +118,7 @@ public class ComprarActivity extends AppCompatActivity {
 
         // Botón Pagar
         btnPagar.setOnClickListener(v -> {
-            if (validarDatos()) {
-                procesarPago();
-            }
+            if (validarDatos()) procesarPago();
         });
 
         // Botón Cancelar
@@ -123,60 +147,40 @@ public class ComprarActivity extends AppCompatActivity {
         // Formatear número de tarjeta
         etCardNumber.addTextChangedListener(new TextWatcher() {
             private boolean isFormatting;
-            private int previousLength;
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                previousLength = s.length();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (isFormatting) return;
-
                 isFormatting = true;
                 String input = s.toString().replaceAll("\\s", "");
-
                 if (input.length() <= 16) {
                     StringBuilder formatted = new StringBuilder();
                     for (int i = 0; i < input.length(); i++) {
-                        if (i > 0 && i % 4 == 0) {
-                            formatted.append(" ");
-                        }
+                        if (i > 0 && i % 4 == 0) formatted.append(" ");
                         formatted.append(input.charAt(i));
                     }
-
                     s.replace(0, s.length(), formatted.toString());
                 }
-
                 isFormatting = false;
             }
         });
 
-        // Formatear fecha de expiración
+        // Formatear fecha MM/AA
         etExpiryDate.addTextChangedListener(new TextWatcher() {
             private boolean isFormatting;
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
                 if (isFormatting) return;
-
                 isFormatting = true;
                 String input = s.toString().replaceAll("/", "");
-
                 if (input.length() >= 2) {
-                    s.replace(0, s.length(), input.substring(0, 2) + "/" + input.substring(2));
+                    s.replace(0, s.length(), input.substring(0, 2) + "/" + (input.length() > 2 ? input.substring(2) : ""));
                 }
-
                 isFormatting = false;
             }
         });
@@ -184,17 +188,13 @@ public class ComprarActivity extends AppCompatActivity {
         btnCancelarTarjeta.setOnClickListener(v -> dialog.dismiss());
 
         btnConfirmarTarjeta.setOnClickListener(v -> {
-            String cardNumber = etCardNumber.getText().toString();
+            String cardNumber = etCardNumber.getText().toString().replaceAll("\\s", "");
             String expiryDate = etExpiryDate.getText().toString();
             String cvv = etCvv.getText().toString();
             String cardName = etCardName.getText().toString();
 
-            if (cardNumber.replaceAll("\\s", "").length() < 13 ||
-                    expiryDate.length() < 5 ||
-                    cvv.length() < 3 ||
-                    cardName.isEmpty()) {
-                Toast.makeText(this, "Por favor completa todos los campos de la tarjeta",
-                        Toast.LENGTH_SHORT).show();
+            if (cardNumber.length() < 13 || expiryDate.length() < 5 || cvv.length() < 3 || cardName.isEmpty()) {
+                Toast.makeText(this, "Completa los datos de la tarjeta", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Tarjeta confirmada", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
@@ -210,42 +210,16 @@ public class ComprarActivity extends AppCompatActivity {
         String telefono = etTelefono.getText().toString().trim();
         int nacionalidadPos = spNacionalidad.getSelectedItemPosition();
 
-        if (nombres.isEmpty()) {
-            etNombres.setError("Ingresa tu nombre completo");
-            etNombres.requestFocus();
-            return false;
-        }
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            etEmail.setError("Ingresa un email válido");
-            etEmail.requestFocus();
-            return false;
-        }
-
-        if (nacionalidadPos == 0) {
-            Toast.makeText(this, "Selecciona tu nacionalidad", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (telefono.isEmpty()) {
-            etTelefono.setError("Ingresa tu número de contacto");
-            etTelefono.requestFocus();
-            return false;
-        }
-
-        if (metodoSeleccionado.isEmpty()) {
-            Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
+        if (nombres.isEmpty()) { etNombres.setError("Ingresa tu nombre completo"); etNombres.requestFocus(); return false; }
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) { etEmail.setError("Email no válido"); etEmail.requestFocus(); return false; }
+        if (nacionalidadPos == 0) { Toast.makeText(this, "Selecciona tu nacionalidad", Toast.LENGTH_SHORT).show(); return false; }
+        if (telefono.isEmpty()) { etTelefono.setError("Ingresa tu número de contacto"); etTelefono.requestFocus(); return false; }
+        if (metodoSeleccionado.isEmpty()) { Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show(); return false; }
         return true;
     }
 
     private void procesarPago() {
-        // Simular procesamiento de pago
         Toast.makeText(this, "Procesando pago...", Toast.LENGTH_SHORT).show();
-
-        // Navegar a confirmación de compra
         new android.os.Handler().postDelayed(() -> {
             Intent intent = new Intent(ComprarActivity.this, ConfirmarCompraActivity.class);
             startActivity(intent);

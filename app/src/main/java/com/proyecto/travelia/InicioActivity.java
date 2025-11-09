@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -24,6 +22,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.proyecto.travelia.ui.BottomNavView;
 
 public class InicioActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -35,34 +34,18 @@ public class InicioActivity extends AppCompatActivity implements OnMapReadyCallb
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_inicio);
 
-        // ✅ Ajuste edge-to-edge
+        // ✅ Ajuste edge-to-edge (padding superior/inferior del contenedor raíz)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets sb = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(sb.left, sb.top, sb.right, sb.bottom);
+            v.setPadding(sb.left, sb.top, sb.right, 0); // bottom = 0, el BottomNav maneja su propio margen
             return insets;
         });
 
-        // ✅ Elevar Bottom Nav
-        CardView bottomCard = findViewById(R.id.card_bottom_nav);
-        if (bottomCard != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(bottomCard, (v, insets) -> {
-                Insets sys = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.ime());
-                ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-                int base = dp(10);
-                lp.bottomMargin = base + sys.bottom;
-                v.setLayoutParams(lp);
-                return insets;
-            });
-        }
-
-        // ✅ --- MAPA ---
+        // ✅ MAPA
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         if (mapFragment != null) mapFragment.getMapAsync(this);
 
-        // ✅ --- NAV BOTTOM ---
-        setupBottomNavigation();
-
-        // ✅ ✅ ✅ RECOMENDACIONES DINÁMICAS ✅ ✅ ✅
+        // ✅ RECOMENDACIONES DINÁMICAS (igual que ya tenías)
         LinearLayout container = findViewById(R.id.container_recomendaciones);
         LayoutInflater inflater = LayoutInflater.from(this);
 
@@ -74,7 +57,6 @@ public class InicioActivity extends AppCompatActivity implements OnMapReadyCallb
 
         for (CardData item : items) {
             View card = inflater.inflate(R.layout.card_recomendacion, container, false);
-
             ImageView iv = card.findViewById(R.id.iv_destino);
             TextView tvNombre = card.findViewById(R.id.tv_nombre_destino);
             TextView tvPrecio = card.findViewById(R.id.tv_precio);
@@ -83,55 +65,21 @@ public class InicioActivity extends AppCompatActivity implements OnMapReadyCallb
             tvNombre.setText(item.nombre);
             tvPrecio.setText(item.precio);
 
-            card.setOnClickListener(v ->
-                    Toast.makeText(this, "Abrir: " + item.nombre, Toast.LENGTH_SHORT).show()
-            );
-
+            card.setOnClickListener(v -> Toast.makeText(this, "Abrir: " + item.nombre, Toast.LENGTH_SHORT).show());
             container.addView(card);
         }
-    }
 
-    // ✅ BOTTOM NAV
-    private void setupBottomNavigation() {
-        LinearLayout navHome = findViewById(R.id.nav_home);
-        LinearLayout navExplorar = findViewById(R.id.nav_explorar);
-        LinearLayout navAdd = findViewById(R.id.nav_add);
-        LinearLayout navFavoritos = findViewById(R.id.nav_favorites);
-        LinearLayout navReservar = findViewById(R.id.nav_reserve);
-
-        if (navHome != null)
-            navHome.setOnClickListener(v -> Toast.makeText(this, "Ya estás en Home", Toast.LENGTH_SHORT).show());
-
-        if (navExplorar != null)
-            navExplorar.setOnClickListener(v -> {
-                startActivity(new Intent(this, ExplorarActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
+        // ✅ BottomNavView: acción especial para ADD (opcional)
+        BottomNavView bottom = findViewById(R.id.bottom_nav);
+        if (bottom != null) {
+            bottom.setOnAddClickListener(v -> {
+                // TODO: cambia a tu Activity real para crear/publicar
+                // startActivity(new Intent(this, CrearPublicacionActivity.class));
+                Toast.makeText(this, "Acción agregar", Toast.LENGTH_SHORT).show();
             });
-
-        if (navAdd != null)
-            navAdd.setOnClickListener(v -> Toast.makeText(this, "Función agregar pendiente", Toast.LENGTH_SHORT).show());
-
-        if (navFavoritos != null)
-            navFavoritos.setOnClickListener(v -> {
-                startActivity(new Intent(this, com.proyecto.travelia.favoritos.FavoritosActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            });
-
-        if (navReservar != null) {
-            navReservar.setOnClickListener(v -> {
-                // Abre la pantalla de carrito/compra (o cambia a ConfirmarReservaActivity si prefieres)
-                startActivity(new Intent(this, ComprarActivity.class));
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            });
+            // Si quieres evitar que cierre esta activity al navegar:
+            // bottom.setFinishOnNavigate(false);
         }
-    }
-
-    private int dp(int value) {
-        float d = getResources().getDisplayMetrics().density;
-        return Math.round(value * d);
     }
 
     // ✅ MAPA
@@ -146,5 +94,14 @@ public class InicioActivity extends AppCompatActivity implements OnMapReadyCallb
         mMaps.addMarker(new MarkerOptions().position(ucontinental).title("U. Continental"));
 
         mMaps.moveCamera(CameraUpdateFactory.newLatLngZoom(cusco, 12f));
+    }
+
+    // Clase auxiliar para las cards (si no la tienes ya)
+    static class CardData {
+        String id, nombre, lugar, precio, estrellas, resumen;
+        int imagen;
+        CardData(String id, String nombre, String lugar, String precio, String estrellas, String resumen, int imagen) {
+            this.id = id; this.nombre = nombre; this.lugar = lugar; this.precio = precio; this.estrellas = estrellas; this.resumen = resumen; this.imagen = imagen;
+        }
     }
 }

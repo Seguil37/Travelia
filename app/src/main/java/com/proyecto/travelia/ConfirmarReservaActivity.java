@@ -11,6 +11,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.proyecto.travelia.ui.BottomNavView;
+
 public class ConfirmarReservaActivity extends AppCompatActivity {
 
     private TextView tvTotal;
@@ -22,13 +24,16 @@ public class ConfirmarReservaActivity extends AppCompatActivity {
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_confirmar_reserva);
+
+        // 🔧 Igual que Favoritos: bottom = 0
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets sb = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(sb.left, sb.top, sb.right, sb.bottom);
+            v.setPadding(sb.left, sb.top, sb.right, 0);
             return insets;
         });
 
         initViews();
+        setupBottomNavNew();
         setupListeners();
     }
 
@@ -42,5 +47,10 @@ public class ConfirmarReservaActivity extends AppCompatActivity {
             Intent intent = new Intent(ConfirmarReservaActivity.this, ComprarActivity.class);
             startActivity(intent);
         });
+    }
+
+    private void setupBottomNavNew() {
+        BottomNavView bottom = findViewById(R.id.bottom_nav);
+        // Sin lógica extra de insets aquí
     }
 }
