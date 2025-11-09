@@ -13,7 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.proyecto.travelia.ComprarActivity;
+import com.proyecto.travelia.ConfirmarReservaActivity;
 import com.proyecto.travelia.ExplorarActivity;
 import com.proyecto.travelia.InicioActivity;
 import com.proyecto.travelia.R;
@@ -69,7 +69,7 @@ public class BottomNavView extends CardView {
         navExplorar.setOnClickListener(v -> navigate(ctx, ExplorarActivity.class));
         navAdd.setOnClickListener(v -> { /* acción pendiente */ });
         navFavorites.setOnClickListener(v -> navigate(ctx, com.proyecto.travelia.favoritos.FavoritosActivity.class));
-        navReserve.setOnClickListener(v -> navigate(ctx, ComprarActivity.class));
+        navReserve.setOnClickListener(v -> navigate(ctx, ConfirmarReservaActivity.class));
     }
 
     private void navigate(Context ctx, Class<?> target) {

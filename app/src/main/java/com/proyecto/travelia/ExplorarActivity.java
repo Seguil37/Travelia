@@ -138,6 +138,7 @@ public class ExplorarActivity extends AppCompatActivity {
             if (btnDetalles != null) {
                 btnDetalles.setOnClickListener(v -> {
                     Intent intent = new Intent(ExplorarActivity.this, DetalleArticuloActivity.class);
+                    intent.putExtra("id", d.id);
                     intent.putExtra("titulo", d.titulo);
                     intent.putExtra("ubicacion", d.ubicacion);
                     intent.putExtra("precio", d.precio);

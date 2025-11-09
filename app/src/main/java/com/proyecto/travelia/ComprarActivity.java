@@ -5,20 +5,32 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.cardview.widget.CardView;
 
+import com.proyecto.travelia.data.ReservationsRepository;
+import com.proyecto.travelia.data.local.ReservationEntity;
 import com.proyecto.travelia.ui.BottomNavView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class ComprarActivity extends AppCompatActivity {
 
@@ -26,7 +38,15 @@ public class ComprarActivity extends AppCompatActivity {
     private Spinner spNacionalidad;
     private CardView cardDebito, cardPaypal, cardTransferencia, cardYape;
     private Button btnPagar, btnCancelar;
+    private LinearLayout layoutResumen;
+    private TextView tvEmptyResumen;
+    private View viewResumenDivider;
+    private TextView tvTotal;
+
     private String metodoSeleccionado = "";
+    private ReservationsRepository reservationsRepository;
+    private List<ReservationEntity> currentReservations = new ArrayList<>();
+    private double totalActual = 0d;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +54,6 @@ public class ComprarActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_comprar);
 
-        // Edge-to-edge: el BottomNav maneja el margen inferior
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets sb = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(sb.left, sb.top, sb.right, 0);
@@ -44,6 +63,7 @@ public class ComprarActivity extends AppCompatActivity {
         initViews();
         setupSpinners();
         setupBottomNav();
+        initReservationsObserver();
         setupListeners();
     }
 
@@ -60,6 +80,11 @@ public class ComprarActivity extends AppCompatActivity {
 
         btnPagar = findViewById(R.id.btn_pagar);
         btnCancelar = findViewById(R.id.btn_cancelar);
+
+        layoutResumen = findViewById(R.id.layout_resumen_reservas);
+        tvEmptyResumen = findViewById(R.id.tv_empty_resumen);
+        viewResumenDivider = findViewById(R.id.view_resumen_divider);
+        tvTotal = findViewById(R.id.tv_total);
     }
 
     private void setupSpinners() {
@@ -74,17 +99,67 @@ public class ComprarActivity extends AppCompatActivity {
     private void setupBottomNav() {
         BottomNavView bottom = findViewById(R.id.bottom_nav);
         if (bottom != null) {
-            // Acción especial para ADD (opcional)
             bottom.setOnAddClickListener(v ->
                     Toast.makeText(this, "Acción agregar (Compra)", Toast.LENGTH_SHORT).show()
             );
-            // Si no quieres cerrar esta Activity al cambiar de pestaña:
-            // bottom.setFinishOnNavigate(false);
+            bottom.highlight(BottomNavView.Tab.RESERVE);
         }
     }
 
+    private void initReservationsObserver() {
+        reservationsRepository = new ReservationsRepository(this);
+        reservationsRepository.observeAll().observe(this, this::renderResumenReservas);
+    }
+
+    private void renderResumenReservas(List<ReservationEntity> reservas) {
+        layoutResumen.removeAllViews();
+
+        if (reservas == null || reservas.isEmpty()) {
+            currentReservations = new ArrayList<>();
+            tvEmptyResumen.setVisibility(View.VISIBLE);
+            viewResumenDivider.setVisibility(View.GONE);
+            totalActual = 0d;
+            tvTotal.setText(String.format(Locale.getDefault(), "S/%.2f", totalActual));
+            return;
+        }
+
+        currentReservations = new ArrayList<>(reservas);
+        tvEmptyResumen.setVisibility(View.GONE);
+        viewResumenDivider.setVisibility(View.VISIBLE);
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        totalActual = 0d;
+
+        for (ReservationEntity entity : currentReservations) {
+            View view = inflater.inflate(R.layout.item_reserva, layoutResumen, false);
+
+            TextView tvTitulo = view.findViewById(R.id.tv_reserva_titulo);
+            TextView tvUbicacion = view.findViewById(R.id.tv_reserva_ubicacion);
+            TextView tvFecha = view.findViewById(R.id.tv_reserva_fecha);
+            TextView tvParticipantes = view.findViewById(R.id.tv_reserva_participantes);
+            TextView tvPrecio = view.findViewById(R.id.tv_reserva_precio);
+            ImageView ivImagen = view.findViewById(R.id.iv_reserva);
+            ImageButton btnEliminar = view.findViewById(R.id.btn_eliminar_reserva);
+
+            tvTitulo.setText(entity.title);
+            tvUbicacion.setText(entity.location);
+            tvFecha.setText(entity.date);
+            tvParticipantes.setText(entity.participants);
+            tvPrecio.setText(String.format(Locale.getDefault(), "S/%.2f", entity.price));
+            if (entity.imageRes != 0) {
+                ivImagen.setImageResource(entity.imageRes);
+            }
+
+            btnEliminar.setVisibility(View.GONE);
+
+            layoutResumen.addView(view);
+            totalActual += entity.price;
+        }
+
+        tvTotal.setText(String.format(Locale.getDefault(), "S/%.2f", totalActual));
+    }
+
     private void setupListeners() {
-        // Método de pago - Débito/Crédito
         cardDebito.setOnClickListener(v -> {
             metodoSeleccionado = "debito";
             resetMetodosSeleccion();
@@ -92,7 +167,6 @@ public class ComprarActivity extends AppCompatActivity {
             mostrarDialogoTarjeta();
         });
 
-        // PayPal
         cardPaypal.setOnClickListener(v -> {
             metodoSeleccionado = "paypal";
             resetMetodosSeleccion();
@@ -100,7 +174,6 @@ public class ComprarActivity extends AppCompatActivity {
             Toast.makeText(this, "PayPal seleccionado", Toast.LENGTH_SHORT).show();
         });
 
-        // Transferencia
         cardTransferencia.setOnClickListener(v -> {
             metodoSeleccionado = "transferencia";
             resetMetodosSeleccion();
@@ -108,7 +181,6 @@ public class ComprarActivity extends AppCompatActivity {
             Toast.makeText(this, "Transferencia seleccionada", Toast.LENGTH_SHORT).show();
         });
 
-        // Yape/Plin
         cardYape.setOnClickListener(v -> {
             metodoSeleccionado = "yape";
             resetMetodosSeleccion();
@@ -116,12 +188,14 @@ public class ComprarActivity extends AppCompatActivity {
             Toast.makeText(this, "Yape/Plin seleccionado", Toast.LENGTH_SHORT).show();
         });
 
-        // Botón Pagar
         btnPagar.setOnClickListener(v -> {
+            if (currentReservations.isEmpty()) {
+                Toast.makeText(this, "Tu carrito de reservas está vacío", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (validarDatos()) procesarPago();
         });
 
-        // Botón Cancelar
         btnCancelar.setOnClickListener(v -> finish());
     }
 
@@ -144,13 +218,10 @@ public class ComprarActivity extends AppCompatActivity {
         Button btnCancelarTarjeta = dialog.findViewById(R.id.btn_cancelar_tarjeta);
         Button btnConfirmarTarjeta = dialog.findViewById(R.id.btn_confirmar_tarjeta);
 
-        // Formatear número de tarjeta
         etCardNumber.addTextChangedListener(new TextWatcher() {
             private boolean isFormatting;
-
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
             @Override
             public void afterTextChanged(Editable s) {
                 if (isFormatting) return;
@@ -168,7 +239,6 @@ public class ComprarActivity extends AppCompatActivity {
             }
         });
 
-        // Formatear fecha MM/AA
         etExpiryDate.addTextChangedListener(new TextWatcher() {
             private boolean isFormatting;
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -222,6 +292,7 @@ public class ComprarActivity extends AppCompatActivity {
         Toast.makeText(this, "Procesando pago...", Toast.LENGTH_SHORT).show();
         new android.os.Handler().postDelayed(() -> {
             Intent intent = new Intent(ComprarActivity.this, ConfirmarCompraActivity.class);
+            intent.putExtra("total_reservas", totalActual);
             startActivity(intent);
             finish();
         }, 1500);

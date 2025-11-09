@@ -74,7 +74,7 @@
                 android:textStyle="bold"
                 android:textColor="#1C1C1E" />
 
-            <!-- Resumen compacto -->
+            <!-- Resumen dinámico -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,119 +88,39 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Item 1 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Machupicchu Full Day"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="S/560.00"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-                    </LinearLayout>
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="15 octubre, 2025\n2 Adultos, 1 niño"
-                        android:textSize="12sp"
+                        android:text="Resumen de tu reserva"
+                        android:textColor="#1C1C1E"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_empty_resumen"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Aún no agregas tours a tu reserva."
                         android:textColor="#666666"
-                        android:layout_marginTop="4dp" />
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_resumen_reservas"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="8dp" />
 
                     <View
+                        android:id="@+id/view_resumen_divider"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
                         android:background="#E0E0E0"
-                        android:layout_marginVertical="12dp" />
-
-                    <!-- Item 2 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Valle Sagrado"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="S/180.00"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="17 octubre, 2025\n2 Adultos, 1 niño"
-                        android:textSize="12sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="4dp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginVertical="12dp" />
-
-                    <!-- Item 3 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Salkantay 4D/3N"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="S/1200.00"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="18 octubre, 2025\n2 Adultos, 1 niño"
-                        android:textSize="12sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="4dp" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginVertical="12dp" />
+                        android:visibility="gone" />
 
                     <!-- Total -->
                     <LinearLayout
@@ -221,7 +141,7 @@
                             android:id="@+id/tv_total"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S/1940.00"
+                            android:text="S/0.00"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:textColor="#1C1C1E" />

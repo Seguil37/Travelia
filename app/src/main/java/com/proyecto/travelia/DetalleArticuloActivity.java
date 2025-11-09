@@ -16,9 +16,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.proyecto.travelia.data.ReservationsRepository;
+import com.proyecto.travelia.data.local.ReservationEntity;
 import com.proyecto.travelia.ui.BottomNavView;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class DetalleArticuloActivity extends AppCompatActivity {
 
@@ -29,6 +32,11 @@ public class DetalleArticuloActivity extends AppCompatActivity {
     private Spinner spAdultos, spIdioma;
     private Button btnRegresar, btnVerDisponibilidad, btnReservar;
     private Button btnEscribirOpinion, btnVerMasResenas;
+
+    private ReservationsRepository reservationsRepository;
+    private String tourId;
+    private int imageRes;
+    private double priceValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +83,20 @@ public class DetalleArticuloActivity extends AppCompatActivity {
     }
 
     private void loadArticleData() {
+        reservationsRepository = new ReservationsRepository(this);
+
         Intent intent = getIntent();
+        tourId = intent.getStringExtra("id");
         String titulo = intent.getStringExtra("titulo");
         String ubicacion = intent.getStringExtra("ubicacion");
         String precio = intent.getStringExtra("precio");
         String rating = intent.getStringExtra("rating");
-        int imageRes = intent.getIntExtra("imageRes", R.drawable.mapi);
+        imageRes = intent.getIntExtra("imageRes", R.drawable.mapi);
 
         if (titulo != null) tvTituloDetalle.setText(titulo);
         if (ubicacion != null) tvUbicacionDetalle.setText(ubicacion);
-        if (precio != null) tvPrecioDetalle.setText(precio + ".00"); // si ya viene con .00, quita esto
+        priceValue = parsePrice(precio);
+        tvPrecioDetalle.setText(String.format(Locale.getDefault(), "S/%.2f", priceValue));
         if (rating != null) tvValoracion.setText("★ " + rating);
         ivDetalleImagen.setImageResource(imageRes);
 
@@ -124,11 +136,26 @@ public class DetalleArticuloActivity extends AppCompatActivity {
             if ("Seleccionar fecha".contentEquals(fecha)) {
                 Toast.makeText(this, "Por favor selecciona una fecha", Toast.LENGTH_SHORT).show();
             } else {
+                String titulo = tvTituloDetalle.getText().toString();
+                String ubicacion = tvUbicacionDetalle.getText().toString();
+                String participantes = spAdultos.getSelectedItem().toString();
+                String reservationId = ReservationsRepository.buildId(tourId != null ? tourId : titulo, fecha);
+
+                ReservationEntity entity = new ReservationEntity(
+                        reservationId,
+                        tourId,
+                        titulo,
+                        ubicacion,
+                        fecha,
+                        participantes,
+                        priceValue,
+                        imageRes,
+                        System.currentTimeMillis()
+                );
+
+                reservationsRepository.upsert(entity);
+
                 Intent intent = new Intent(DetalleArticuloActivity.this, ConfirmarReservaActivity.class);
-                intent.putExtra("titulo", getIntent().getStringExtra("titulo"));
-                intent.putExtra("fecha", fecha);
-                intent.putExtra("adultos", spAdultos.getSelectedItem().toString());
-                intent.putExtra("precio", tvPrecioDetalle.getText().toString());
                 startActivity(intent);
                 Toast.makeText(this, "Agregado a tu carrito de reservas", Toast.LENGTH_SHORT).show();
             }
@@ -162,5 +189,17 @@ public class DetalleArticuloActivity extends AppCompatActivity {
     private void setupBottomNavNew() {
         BottomNavView bottom = findViewById(R.id.bottom_nav);
         // Sin lógica extra de insets aquí
+    }
+
+    private double parsePrice(String price) {
+        if (price == null) return 0d;
+        String cleaned = price.replace("S/", "").replace("s/", "");
+        cleaned = cleaned.replaceAll("[^0-9.,]", "").replace(",", "");
+        if (cleaned.isEmpty()) return 0d;
+        try {
+            return Double.parseDouble(cleaned);
+        } catch (NumberFormatException e) {
+            return 0d;
+        }
     }
 }

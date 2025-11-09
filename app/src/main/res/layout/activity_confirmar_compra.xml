@@ -126,77 +126,31 @@
                         android:textColor="#1C1C1E"
                         android:gravity="center" />
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginVertical="16dp" />
-
                     <TextView
+                        android:id="@+id/tv_empty_compra"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Machupicchu Full Day"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#1C1C1E" />
+                        android:layout_marginTop="12dp"
+                        android:text="No encontramos reservas para mostrar."
+                        android:textColor="#666666"
+                        android:textSize="13sp"
+                        android:gravity="center"
+                        android:visibility="gone" />
 
-                    <TextView
+                    <LinearLayout
+                        android:id="@+id/layout_compra_reservas"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="15 Oct 2025, Cusco, Peru"
-                        android:textSize="12sp"
-                        android:textColor="#666666" />
+                        android:orientation="vertical"
+                        android:layout_marginTop="12dp" />
 
                     <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginVertical="12dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Valle Sagrado"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#1C1C1E" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="17 Oct 2025, Cusco, Peru"
-                        android:textSize="12sp"
-                        android:textColor="#666666" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginVertical="12dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Salkantay 4D/3N"
-                        android:textSize="14sp"
-                        android:textStyle="bold"
-                        android:textColor="#1C1C1E" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="17 Oct 2025, Cusco, Peru"
-                        android:textSize="12sp"
-                        android:textColor="#666666" />
-
-                    <View
+                        android:id="@+id/view_compra_divider"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="#E0E0E0"
-                        android:layout_marginVertical="16dp" />
+                        android:layout_marginTop="16dp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -215,7 +169,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S/1940.00"
+                            android:id="@+id/tv_total_pagado"
+                            android:text="S/0.00"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:textColor="#E91E63" />
