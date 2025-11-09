@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e2e3e8"
+    android:padding="24dp"> <!-- fondo claro inline -->
+
+    <!-- Logo/imagen (opcional) -->
+
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="250dp"
+        android:layout_height="285dp"
+        android:layout_marginTop="64dp"
+        android:contentDescription="Logo"
+        android:src="@drawable/ic_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_titulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:fontFamily="@font/abril_fatface"
+        android:gravity="center"
+        android:text="Travelia"
+        android:textColor="#fd6561"
+        android:textColorLink="#fd6561"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img_logo" />
+
+    <TextView
+        android:id="@+id/tv_subtitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/pt_serif"
+        android:gravity="center"
+        android:text="El mundo en tu bolsillo"
+        android:textColor="#DBA400"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_titulo" />
+
+    <Button
+        android:id="@+id/btn_comenzar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="64dp"
+        android:background="@drawable/rounded_button_gold"
+        android:padding="12dp"
+        android:text="Comenzar"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_subtitulo" />
+
+    <TextView
+        android:id="@+id/tv_subtitulo1"
+        android:layout_width="314dp"
+        android:layout_height="58dp"
+        android:fontFamily="@font/pt_serif"
+        android:gravity="center"
+        android:text="Descubre y comparte los mejores lugares del mundo"
+        android:textColor="#DBA400"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_comenzar"
+        app:layout_constraintVertical_bias="0.625" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

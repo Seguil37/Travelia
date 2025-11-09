@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F4F9"
+    tools:context=".ExplorarActivity">
+
+    <!-- TOP BAR -->
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:background="#FFC107"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_logo"
+            android:contentDescription="Logo"
+            app:tint="@color/white" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="5dp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_logo"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagen de perfil" />
+    </LinearLayout>
+
+    <!-- CONTENIDO SCROLL -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/card_bottom_nav">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <!-- TÍTULOS -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="Explora rutas y experiencias"
+                android:textColor="#fc7e7f"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:text="Elige tu destino y hazlo realidad"
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <!-- BUSCADOR -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/rounded_search_background"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_buscar"
+                    android:contentDescription="Buscar"
+                    app:tint="#999999" />
+
+                <EditText
+                    android:id="@+id/et_search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="Busca un destino, tour o experiencia..."
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:textSize="15sp"
+                    android:textColor="#333333"
+                    android:textColorHint="#999999"/>
+            </LinearLayout>
+
+            <!-- CHIPS CATEGORÍAS -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:paddingHorizontal="20dp"
+                android:scrollbars="none"
+                android:clipToPadding="false">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingHorizontal="20dp"
+                        android:background="@drawable/rounded_button_gold"
+                        android:text="Tours"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingHorizontal="20dp"
+                        android:background="@drawable/rounded_button_social"
+                        android:text="Relax"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingHorizontal="20dp"
+                        android:background="@drawable/rounded_button_social"
+                        android:text="Cabañas"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingHorizontal="20dp"
+                        android:background="@drawable/rounded_button_social"
+                        android:text="Rutas"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginEnd="10dp"
+                        android:paddingHorizontal="20dp"
+                        android:background="@drawable/rounded_button_social"
+                        android:text="Hoteles"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:paddingHorizontal="20dp"
+                        android:background="@drawable/rounded_button_social"
+                        android:text="Alimentacion"
+                        android:textAllCaps="false"
+                        android:textSize="14sp"/>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- FILTROS -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_filtros"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:paddingHorizontal="24dp"
+                    android:background="@drawable/rounded_button_gold"
+                    android:text="Filtros"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:textStyle="bold"/>
+
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ordenar por:"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="8dp"/>
+
+                <Spinner
+                    android:id="@+id/sp_orden"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:minWidth="100dp"
+                    android:paddingHorizontal="12dp"
+                    android:background="@drawable/rounded_circle_white_bg" />
+
+                <Space
+                    android:layout_width="8dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ver:"
+                    android:textColor="#666666"
+                    android:textSize="14sp"
+                    android:layout_marginEnd="8dp"/>
+
+                <LinearLayout
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/rounded_circle_white_bg"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="3dp"
+                        android:background="#9C27B0"
+                        android:layout_marginBottom="3dp"/>
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="3dp"
+                        android:background="#9C27B0"
+                        android:layout_marginBottom="3dp"/>
+                    <View
+                        android:layout_width="18dp"
+                        android:layout_height="3dp"
+                        android:background="#9C27B0"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- CONTADOR -->
+            <TextView
+                android:id="@+id/tv_contador"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:text="42 artículos encontrados"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- GRILLA 2xN -->
+            <GridLayout
+                android:id="@+id/grid_rutas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:columnCount="2"
+                android:alignmentMode="alignBounds"
+                android:columnOrderPreserved="false"
+                android:useDefaultMargins="false">
+                <!-- Las tarjetas se agregan dinámicamente desde Java -->
+            </GridLayout>
+
+            <!-- CTA -->
+            <Button
+                android:id="@+id/btn_mas_rutas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:paddingHorizontal="32dp"
+                android:paddingVertical="12dp"
+                android:background="@drawable/rounded_button_gold"
+                android:text="Explorar más rutas"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_bottom_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="#FFC107"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp">
+
+            <LinearLayout
+                android:id="@+id/nav_home"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_home" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Home"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_explorar"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_explorar" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Explorar"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_add"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView
+                    style="@style/BottomNavIconStyle"
+                    android:layout_width="46dp"
+                    android:layout_height="41dp"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="agregar"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_favorites"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_favoritos" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Favoritos"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_reserve"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_carrito" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Reservar"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

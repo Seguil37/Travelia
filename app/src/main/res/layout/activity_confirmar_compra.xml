@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F4F9">
+
+    <!-- TOP BAR -->
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:background="#FFC107"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_logo"
+            android:contentDescription="Logo"
+            app:tint="@color/white" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="5dp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_logo"
+            android:scaleType="centerCrop"
+            android:contentDescription="Perfil" />
+    </LinearLayout>
+
+    <!-- CONTENIDO -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/top_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/card_bottom_nav">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:gravity="center_horizontal">
+
+            <!-- Título -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Confirmar Compra"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="#666666"
+                android:gravity="center" />
+
+            <!-- Icono de éxito -->
+            <View
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="32dp"
+                android:background="@drawable/rounded_search_background" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Tu reserva está\nconfirmada! 🎉"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#E91E63"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Hemos enviado todos los detalles a tu correo electrónico"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:gravity="center" />
+
+            <!-- Detalles de la reserva -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Detalles de tu reserva"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1C1C1E"
+                        android:gravity="center" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginVertical="16dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Machupicchu Full Day"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#1C1C1E" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="15 Oct 2025, Cusco, Peru"
+                        android:textSize="12sp"
+                        android:textColor="#666666" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginVertical="12dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Valle Sagrado"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#1C1C1E" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="17 Oct 2025, Cusco, Peru"
+                        android:textSize="12sp"
+                        android:textColor="#666666" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginVertical="12dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Salkantay 4D/3N"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#1C1C1E" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="17 Oct 2025, Cusco, Peru"
+                        android:textSize="12sp"
+                        android:textColor="#666666" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginVertical="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Total pagado:"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="#1C1C1E" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="S/1940.00"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="#E91E63" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Qué sigue? -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="6dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Qué sigue?"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#1C1C1E"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="Recibirás un correo con las vouchers y detalles de cada actividad. Revisa tu correo electrónico o tu tour."
+                        android:textSize="13sp"
+                        android:textColor="#666666"
+                        android:gravity="center"
+                        android:lineSpacingExtra="2dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Botón Ver mis viajes -->
+            <Button
+                android:id="@+id/btn_ver_viajes"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/rounded_button_gold"
+                android:text="Ver mis viajes"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- BOTTOM NAV -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_bottom_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="#FFC107"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp">
+
+            <LinearLayout
+                android:id="@+id/nav_home"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_home" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Home"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_explorar"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_explorar" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Explorar"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_add"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView
+                    style="@style/BottomNavIconStyle"
+                    android:layout_width="46dp"
+                    android:layout_height="41dp"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="agregar"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_favorites"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_favoritos" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Favoritos"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_reserve"
+                style="@style/BottomNavLayoutItemStyle">
+                <ImageView style="@style/BottomNavIconStyle" android:src="@drawable/ic_carrito" app:tint="@color/white"/>
+                <TextView style="@style/BottomNavTextStyle" android:text="Reservar"/>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

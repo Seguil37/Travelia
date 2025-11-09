@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Travelia">
+
+        <!-- API Key de Google Maps (puedes moverla a manifestPlaceholders luego) -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAu4b0tfHYBpA09qO3pDRhKuJyUCP8H05c" />
+
+        <!-- Activities existentes -->
+        <activity
+            android:name=".DetalleArticuloActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExplorarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".favoritos.FavoritosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".InicioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+
+        <!-- NUEVAS: flujo de reservas/compra -->
+        <activity
+            android:name=".ConfirmarReservaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ComprarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ConfirmarCompraActivity"
+            android:exported="false" />
+
+        <!-- Launcher -->
+        <activity
+            android:name=".BienvenidaActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F4F9"
+    tools:context=".InicioActivity">
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:background="#FFC107"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_logo"
+            app:tint="@color/white"
+            android:contentDescription="Logo" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginEnd="5dp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_logo"
+            android:scaleType="centerCrop"
+            android:contentDescription="Imagen de perfil" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/card_bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_saludo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="HOLA USUARIO"
+                android:textColor="#fc7e7f"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_pregunta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:text="¿Listo para tu próxima aventura?"
+                android:textColor="#888888"
+                android:textSize="16sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_mapa"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="15dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
+
+                <fragment
+                    android:id="@+id/mapa"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:ignore="FragmentTagUsage" />
+
+                <EditText
+                    android:id="@+id/et_search_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/rounded_search_background"
+                    android:drawablePadding="10dp"
+                    android:elevation="6dp"
+                    android:hint="A donde quieres ir?"
+                    android:paddingHorizontal="15dp"
+                    android:textColorHint="#999999"
+                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:id="@+id/tv_recomendado_titulo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:text="Recomendado para ti"
+                    android:textColor="#333333"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_ver_todo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="Ver todo"
+                    android:textColor="#FFC107"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <HorizontalScrollView
+                android:id="@+id/hscroll_recomendaciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:clipToPadding="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
+
+                <LinearLayout
+                    android:id="@+id/container_recomendaciones"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"/>
+            </HorizontalScrollView>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_bottom_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:background="#FFC107"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp">
+
+            <LinearLayout
+                android:id="@+id/nav_home"
+                style="@style/BottomNavLayoutItemStyle">
+
+                <ImageView
+                    style="@style/BottomNavIconStyle"
+                    android:src="@drawable/ic_home"
+                    app:tint="@color/white" />
+
+                <TextView
+                    style="@style/BottomNavTextStyle"
+                    android:text="Home" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_explorar"
+                style="@style/BottomNavLayoutItemStyle">
+
+                <ImageView
+                    style="@style/BottomNavIconStyle"
+                    android:src="@drawable/ic_explorar"
+                    app:tint="@color/white" />
+
+                <TextView
+                    style="@style/BottomNavTextStyle"
+                    android:text="Explorar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_add"
+                style="@style/BottomNavLayoutItemStyle">
+
+                <ImageView
+                    style="@style/BottomNavIconStyle"
+                    android:layout_width="46dp"
+                    android:layout_height="41dp"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/white" />
+
+                <TextView
+                    style="@style/BottomNavTextStyle"
+                    android:text="agregar" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_favorites"
+                style="@style/BottomNavLayoutItemStyle">
+
+                <ImageView
+                    style="@style/BottomNavIconStyle"
+                    android:src="@drawable/ic_favoritos"
+                    app:tint="@color/white" />
+
+                <TextView
+                    style="@style/BottomNavTextStyle"
+                    android:text="Favoritos" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/nav_reserve"
+                style="@style/BottomNavLayoutItemStyle">
+
+                <ImageView
+                    style="@style/BottomNavIconStyle"
+                    android:src="@drawable/ic_carrito"
+                    app:tint="@color/white" />
+
+                <TextView
+                    style="@style/BottomNavTextStyle"
+                    android:text="Reservar" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
