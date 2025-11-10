@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvTituloPayPal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pagar con PayPal"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvMontoPayPal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total: S/0.00"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/etCorreoPayPal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Correo asociado a PayPal"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/btnConfirmarPayPal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continuar con PayPal"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnCancelarPayPal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancelar"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

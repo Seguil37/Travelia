@@ -1,7 +1,9 @@
 package com.proyecto.travelia;
+import kotlin.Unit;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,6 +29,23 @@ import androidx.core.view.WindowInsetsCompat;
 import com.proyecto.travelia.data.ReservationsRepository;
 import com.proyecto.travelia.data.local.ReservationEntity;
 import com.proyecto.travelia.ui.BottomNavView;
+
+// ==== IMPORTS PAYPAL (SDK 1.x) ====
+import com.paypal.checkout.PayPalCheckout;
+import com.paypal.checkout.approve.Approval;
+import com.paypal.checkout.approve.OnApprove;
+import com.paypal.checkout.cancel.OnCancel;
+import com.paypal.checkout.createorder.CreateOrder;
+import com.paypal.checkout.createorder.CreateOrderActions;
+import com.paypal.checkout.createorder.CurrencyCode;
+import com.paypal.checkout.createorder.OrderIntent;
+import com.paypal.checkout.createorder.UserAction;
+import com.paypal.checkout.error.ErrorInfo;
+import com.paypal.checkout.error.OnError;
+import com.paypal.checkout.order.Amount;
+import com.paypal.checkout.order.AppContext;
+import com.paypal.checkout.order.OrderRequest;
+import com.paypal.checkout.order.PurchaseUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,8 +109,11 @@ public class ComprarActivity extends AppCompatActivity {
     private void setupSpinners() {
         String[] paises = {"Selecciona tu país", "Perú", "Argentina", "Chile", "Colombia",
                 "México", "España", "Estados Unidos", "Brasil"};
-        ArrayAdapter<String> paisesAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, paises);
+        ArrayAdapter<String> paisesAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                paises
+        );
         paisesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spNacionalidad.setAdapter(paisesAdapter);
     }
@@ -120,6 +142,8 @@ public class ComprarActivity extends AppCompatActivity {
             viewResumenDivider.setVisibility(View.GONE);
             totalActual = 0d;
             tvTotal.setText(String.format(Locale.getDefault(), "S/%.2f", totalActual));
+            btnPagar.setEnabled(false);
+            btnPagar.setText("Pagar");
             return;
         }
 
@@ -157,6 +181,8 @@ public class ComprarActivity extends AppCompatActivity {
         }
 
         tvTotal.setText(String.format(Locale.getDefault(), "S/%.2f", totalActual));
+        btnPagar.setEnabled(true);
+        btnPagar.setText(String.format(Locale.getDefault(), "Pagar S/%.2f", totalActual));
     }
 
     private void setupListeners() {
@@ -167,11 +193,12 @@ public class ComprarActivity extends AppCompatActivity {
             mostrarDialogoTarjeta();
         });
 
+        // 🔹 AQUÍ CAMBIAMOS: ahora al tocar PayPal abrimos el formulario
         cardPaypal.setOnClickListener(v -> {
             metodoSeleccionado = "paypal";
             resetMetodosSeleccion();
             cardPaypal.setCardElevation(12f);
-            Toast.makeText(this, "PayPal seleccionado", Toast.LENGTH_SHORT).show();
+            mostrarDialogoPayPal();   // <<--- NUEVO
         });
 
         cardTransferencia.setOnClickListener(v -> {
@@ -193,7 +220,25 @@ public class ComprarActivity extends AppCompatActivity {
                 Toast.makeText(this, "Tu carrito de reservas está vacío", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (validarDatos()) procesarPago();
+
+            if (!validarDatos()) return;
+
+            switch (metodoSeleccionado) {
+                case "paypal":
+                    // En PayPal volvemos a mostrar el formulario por si no lo abrió antes
+                    mostrarDialogoPayPal();
+                    break;
+
+                case "debito":
+                case "transferencia":
+                case "yape":
+                    procesarPago();
+                    break;
+
+                default:
+                    Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show();
+                    break;
+            }
         });
 
         btnCancelar.setOnClickListener(v -> finish());
@@ -220,8 +265,10 @@ public class ComprarActivity extends AppCompatActivity {
 
         etCardNumber.addTextChangedListener(new TextWatcher() {
             private boolean isFormatting;
+
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (isFormatting) return;
@@ -241,15 +288,19 @@ public class ComprarActivity extends AppCompatActivity {
 
         etExpiryDate.addTextChangedListener(new TextWatcher() {
             private boolean isFormatting;
+
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (isFormatting) return;
                 isFormatting = true;
                 String input = s.toString().replaceAll("/", "");
                 if (input.length() >= 2) {
-                    s.replace(0, s.length(), input.substring(0, 2) + "/" + (input.length() > 2 ? input.substring(2) : ""));
+                    s.replace(0, s.length(),
+                            input.substring(0, 2) + "/" +
+                                    (input.length() > 2 ? input.substring(2) : ""));
                 }
                 isFormatting = false;
             }
@@ -263,12 +314,48 @@ public class ComprarActivity extends AppCompatActivity {
             String cvv = etCvv.getText().toString();
             String cardName = etCardName.getText().toString();
 
-            if (cardNumber.length() < 13 || expiryDate.length() < 5 || cvv.length() < 3 || cardName.isEmpty()) {
+            if (cardNumber.length() < 13 || expiryDate.length() < 5 ||
+                    cvv.length() < 3 || cardName.isEmpty()) {
                 Toast.makeText(this, "Completa los datos de la tarjeta", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Tarjeta confirmada", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
+        });
+
+        dialog.show();
+    }
+
+    // 🔹 NUEVO: FORMULARIO DE PAYPAL
+    private void mostrarDialogoPayPal() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_paypal);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+        TextView tvMontoPayPal = dialog.findViewById(R.id.tvMontoPayPal);
+        EditText etCorreoPayPal = dialog.findViewById(R.id.etCorreoPayPal);
+        Button btnConfirmarPayPal = dialog.findViewById(R.id.btnConfirmarPayPal);
+        Button btnCancelarPayPal = dialog.findViewById(R.id.btnCancelarPayPal);
+
+        // Mostrar el total actual en el formulario
+        String textoMonto = String.format(Locale.getDefault(), "Total: S/%.2f", totalActual);
+        tvMontoPayPal.setText(textoMonto);
+
+        btnCancelarPayPal.setOnClickListener(v -> dialog.dismiss());
+
+        btnConfirmarPayPal.setOnClickListener(v -> {
+            String correo = etCorreoPayPal.getText().toString().trim();
+
+            if (correo.isEmpty() ||
+                    !android.util.Patterns.EMAIL_ADDRESS.matcher(correo).matches()) {
+                etCorreoPayPal.setError("Correo PayPal no válido");
+                return;
+            }
+
+            // Aquí lanzamos el flujo real de PayPal
+            startPayPalCheckout(totalActual);
+
+            dialog.dismiss();
         });
 
         dialog.show();
@@ -280,11 +367,35 @@ public class ComprarActivity extends AppCompatActivity {
         String telefono = etTelefono.getText().toString().trim();
         int nacionalidadPos = spNacionalidad.getSelectedItemPosition();
 
-        if (nombres.isEmpty()) { etNombres.setError("Ingresa tu nombre completo"); etNombres.requestFocus(); return false; }
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) { etEmail.setError("Email no válido"); etEmail.requestFocus(); return false; }
-        if (nacionalidadPos == 0) { Toast.makeText(this, "Selecciona tu nacionalidad", Toast.LENGTH_SHORT).show(); return false; }
-        if (telefono.isEmpty()) { etTelefono.setError("Ingresa tu número de contacto"); etTelefono.requestFocus(); return false; }
-        if (metodoSeleccionado.isEmpty()) { Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show(); return false; }
+        if (nombres.isEmpty()) {
+            etNombres.setError("Ingresa tu nombre completo");
+            etNombres.requestFocus();
+            return false;
+        }
+
+        if (email.isEmpty() ||
+                !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            etEmail.setError("Email no válido");
+            etEmail.requestFocus();
+            return false;
+        }
+
+        if (nacionalidadPos == 0) {
+            Toast.makeText(this, "Selecciona tu nacionalidad", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (telefono.isEmpty()) {
+            etTelefono.setError("Ingresa tu número de contacto");
+            etTelefono.requestFocus();
+            return false;
+        }
+
+        if (metodoSeleccionado.isEmpty()) {
+            Toast.makeText(this, "Selecciona un método de pago", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         return true;
     }
 
@@ -296,5 +407,96 @@ public class ComprarActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }, 1500);
+    }
+
+    // ======================
+    //   PAGO CON PAYPAL (SDK 1.x)
+    // ======================
+    private void startPayPalCheckout(double monto) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Toast.makeText(this,
+                    "PayPal solo disponible en Android 6.0 o superior",
+                    Toast.LENGTH_LONG
+            ).show();
+            return;
+        }
+
+        final String value = String.format(Locale.US, "%.2f", monto);
+
+        // 1) Registrar callbacks
+        PayPalCheckout.registerCallbacks(
+                new OnApprove() {
+                    @Override
+                    public void onApprove(Approval approval) {
+                        // Captura la orden cuando el usuario aprueba
+                        approval.getOrderActions().capture(result -> {
+                            runOnUiThread(() -> {
+                                Toast.makeText(
+                                        ComprarActivity.this,
+                                        "Pago completado con PayPal",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                                procesarPago();
+                            });
+                        });
+                    }
+                },
+                new OnCancel() {
+                    @Override
+                    public void onCancel() {
+                        runOnUiThread(() ->
+                                Toast.makeText(
+                                        ComprarActivity.this,
+                                        "Pago cancelado",
+                                        Toast.LENGTH_SHORT
+                                ).show()
+                        );
+                    }
+                },
+                new OnError() {
+                    @Override
+                    public void onError(ErrorInfo errorInfo) {
+                        runOnUiThread(() ->
+                                Toast.makeText(
+                                        ComprarActivity.this,
+                                        "Error en PayPal: " + errorInfo.getReason(),
+                                        Toast.LENGTH_LONG
+                                ).show()
+                        );
+                    }
+                }
+        );
+
+        // 2) Iniciar el checkout creando la orden
+        PayPalCheckout.startCheckout(
+                new CreateOrder() {
+                    @Override
+                    public void create(CreateOrderActions createOrderActions) {
+                        Amount amount = new Amount.Builder()
+                                .currencyCode(CurrencyCode.USD)   // o la moneda que uses
+                                .value(value)
+                                .build();
+
+                        ArrayList<PurchaseUnit> purchaseUnits = new ArrayList<>();
+                        purchaseUnits.add(
+                                new PurchaseUnit.Builder()
+                                        .amount(amount)
+                                        .build()
+                        );
+
+                        AppContext appContext = new AppContext.Builder()
+                                .userAction(UserAction.PAY_NOW)
+                                .build();
+
+                        OrderRequest orderRequest = new OrderRequest.Builder()
+                                .intent(OrderIntent.CAPTURE)
+                                .appContext(appContext)
+                                .purchaseUnitList(purchaseUnits)
+                                .build();
+
+                        createOrderActions.create(orderRequest, it -> Unit.INSTANCE);
+                    }
+                }
+        );
     }
 }

@@ -31,6 +31,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+            }
+        }
+    }
 }
 
 dependencies {
@@ -40,6 +47,9 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    // PayPal Native Checkout SDK
+    // Esta es la versión correcta que coincide con tu código Java
+    implementation("com.paypal.checkout:android-sdk:1.1.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
