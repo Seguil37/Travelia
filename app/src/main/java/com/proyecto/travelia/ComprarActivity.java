@@ -119,7 +119,7 @@ public class ComprarActivity extends AppCompatActivity {
             tvEmptyResumen.setVisibility(View.VISIBLE);
             viewResumenDivider.setVisibility(View.GONE);
             totalActual = 0d;
-            tvTotal.setText(String.format(Locale.getDefault(), "S/%.2f", totalActual));
+            updateTotalViews();
             return;
         }
 
@@ -156,7 +156,13 @@ public class ComprarActivity extends AppCompatActivity {
             totalActual += entity.price;
         }
 
-        tvTotal.setText(String.format(Locale.getDefault(), "S/%.2f", totalActual));
+        updateTotalViews();
+    }
+
+    private void updateTotalViews() {
+        String totalFormatted = String.format(Locale.getDefault(), "S/%.2f", totalActual);
+        tvTotal.setText(totalFormatted);
+        btnPagar.setText(String.format(Locale.getDefault(), "Pagar %s", totalFormatted));
     }
 
     private void setupListeners() {

@@ -420,129 +420,6 @@
                 </androidx.cardview.widget.CardView>
             </GridLayout>
 
-            <!-- Resumen del pedido -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Resumen del pedido"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="#fc7e7f" />
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <!-- items + total (compacto) -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Machupicchu Full Day\n15 Oct 2025, Cusco, Perú"
-                            android:textSize="13sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="S/560.00"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="12dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Valle Sagrado\n17 Oct 2025, Cusco, Perú"
-                            android:textSize="13sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="S/180.00"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="12dp">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Salkantay 4D/3N\n18 Oct 2025, Cusco, Perú"
-                            android:textSize="13sp"
-                            android:textColor="#333333" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="S/1200.00"
-                            android:textSize="13sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="#E0E0E0"
-                        android:layout_marginVertical="12dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Total"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="#fc7e7f" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="S/1940.00"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
             <!-- Botones -->
             <Button
                 android:id="@+id/btn_pagar"
@@ -550,7 +427,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/rounded_button_gold"
-                android:text="Pagar S/1940.00"
+                android:text="Pagar S/0.00"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textSize="16sp"
