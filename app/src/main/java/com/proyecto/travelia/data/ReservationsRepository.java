@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 public class ReservationsRepository {
 
     private final ReservationDao dao;
-    private final ExecutorService ioExecutor = Executors.newSingleThreadExecutor();
+    public final ExecutorService ioExecutor = Executors.newSingleThreadExecutor();
 
     public ReservationsRepository(Context context) {
         dao = AppDatabase.get(context).reservationDao();
@@ -36,6 +36,9 @@ public class ReservationsRepository {
 
     public void clearAll() {
         ioExecutor.execute(dao::clearAll);
+    }
+    public List<ReservationEntity> getAllReservationsSync() {
+        return dao.getAllReservations(); // Llama al método síncrono del DAO
     }
 
     public static String buildId(String tourId, String date) {

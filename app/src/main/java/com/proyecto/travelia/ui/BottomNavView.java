@@ -67,7 +67,11 @@ public class BottomNavView extends CardView {
     private void wireDefaultNavigation(Context ctx) {
         navHome.setOnClickListener(v -> navigate(ctx, InicioActivity.class));
         navExplorar.setOnClickListener(v -> navigate(ctx, ExplorarActivity.class));
-        navAdd.setOnClickListener(v -> { /* acción pendiente */ });
+        navAdd.setOnClickListener(v -> {
+            // Usamos el nombre completo de la clase para evitar errores de importación
+            Intent intent = new Intent(ctx, com.proyecto.travelia.ui.CrearPublicacionActivity.class);
+            ctx.startActivity(intent);
+        });
         navFavorites.setOnClickListener(v -> navigate(ctx, com.proyecto.travelia.favoritos.FavoritosActivity.class));
         navReserve.setOnClickListener(v -> navigate(ctx, ConfirmarReservaActivity.class));
     }

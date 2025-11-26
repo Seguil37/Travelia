@@ -4,8 +4,9 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
-@Database(entities = {FavoriteEntity.class, ReservationEntity.class}, version = 2)
+import java.util.concurrent.ExecutorService; // <-- NUEVO IMPORT
+import java.util.concurrent.Executors;
+@Database(entities = {FavoriteEntity.class, ReservationEntity.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FavoritesDao favoritesDao();

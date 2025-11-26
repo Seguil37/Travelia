@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Nombre del tour"
-                android:textColor="#1C1C1E"
+                android:textColor="#fc7e7f"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 

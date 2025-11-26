@@ -24,8 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_logo"
-            android:contentDescription="Logo"
-            app:tint="@color/white" />
+            android:contentDescription="Logo" />
 
         <Space
             android:layout_width="0dp"
@@ -44,7 +43,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_logo"
+            android:src="@drawable/ic_usuario"
             android:scaleType="centerCrop"
             android:contentDescription="Perfil" />
     </LinearLayout>
@@ -76,7 +75,7 @@
                 android:drawableStart="@drawable/ic_home"
                 android:drawablePadding="8dp"
                 android:text="Regresar a Inventario"
-                android:textColor="#E91E63"
+                android:textColor="#fc7e7f"
                 android:textAllCaps="false"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -343,7 +342,7 @@
                         android:text="Selecciona el número de participantes, fecha e idioma"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="#E91E63"
+                        android:textColor="#fc7e7f"
                         android:lineSpacingExtra="4dp" />
 
                     <!-- Adultos -->
@@ -485,7 +484,7 @@
                         android:text="Hacer un aporte"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:textColor="#1C1C1E" />
+                        android:textColor="#fc7e7f" />
 
                     <!-- Botón escribir opinión -->
                     <Button
@@ -498,7 +497,7 @@
                         android:text="Escribir una opinión"
                         android:textAllCaps="false"
                         android:textSize="14sp"
-                        android:textColor="#333333" />
+                        android:textColor="@color/white" />
 
                     <!-- Valoración general -->
                     <TextView
@@ -508,7 +507,7 @@
                         android:text="Valoración general"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="#3F51B5" />
+                        android:textColor="#fc7e7f" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -547,7 +546,7 @@
                             android:layout_weight="1"
                             android:text="★"
                             android:textSize="48sp"
-                            android:textColor="#3F51B5"
+                            android:textColor="#fc7e7f"
                             android:gravity="center" />
 
                         <TextView
@@ -556,7 +555,7 @@
                             android:layout_weight="1"
                             android:text="★"
                             android:textSize="48sp"
-                            android:textColor="#3F51B5"
+                            android:textColor="#fc7e7f"
                             android:gravity="center" />
 
                         <TextView
@@ -565,7 +564,7 @@
                             android:layout_weight="1"
                             android:text="★"
                             android:textSize="48sp"
-                            android:textColor="#3F51B5"
+                            android:textColor="#fc7e7f"
                             android:gravity="center" />
 
                         <TextView
@@ -574,7 +573,7 @@
                             android:layout_weight="1"
                             android:text="★"
                             android:textSize="48sp"
-                            android:textColor="#3F51B5"
+                            android:textColor="#fc7e7f"
                             android:gravity="center" />
 
                         <TextView
@@ -583,7 +582,7 @@
                             android:layout_weight="1"
                             android:text="☆"
                             android:textSize="48sp"
-                            android:textColor="#3F51B5"
+                            android:textColor="#fc7e7f"
                             android:gravity="center" />
                     </LinearLayout>
 
@@ -604,7 +603,7 @@
                         android:text="Detalles"
                         android:textSize="14sp"
                         android:textStyle="bold"
-                        android:textColor="#333333" />
+                        android:textColor="#fc7e7f" />
 
                     <!-- Guía -->
                     <LinearLayout
@@ -628,7 +627,7 @@
                             android:layout_marginHorizontal="12dp"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:progress="88"
-                            android:progressTint="#3F51B5"
+                            android:progressTint="#fc7e7f"
                             android:progressBackgroundTint="#E0E0E0" />
 
                         <TextView
@@ -662,7 +661,7 @@
                             android:layout_marginHorizontal="12dp"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:progress="90"
-                            android:progressTint="#3F51B5"
+                            android:progressTint="#fc7e7f"
                             android:progressBackgroundTint="#E0E0E0" />
 
                         <TextView
@@ -696,7 +695,7 @@
                             android:layout_marginHorizontal="12dp"
                             style="?android:attr/progressBarStyleHorizontal"
                             android:progress="80"
-                            android:progressTint="#3F51B5"
+                            android:progressTint="#fc7e7f"
                             android:progressBackgroundTint="#E0E0E0" />
 
                         <TextView
@@ -845,7 +844,7 @@
                                 android:textAllCaps="false"
                                 android:textSize="15sp"
                                 android:textStyle="bold"
-                                android:textColor="#333333" />
+                                android:textColor="@color/white" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

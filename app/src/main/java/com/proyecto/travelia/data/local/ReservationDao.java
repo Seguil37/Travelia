@@ -22,4 +22,6 @@ public interface ReservationDao {
 
     @Query("DELETE FROM reservations")
     void clearAll();
+    @Query("SELECT * FROM reservations")
+    List<ReservationEntity> getAllReservations();
 }

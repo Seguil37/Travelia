@@ -150,7 +150,8 @@ public class DetalleArticuloActivity extends AppCompatActivity {
                         participantes,
                         priceValue,
                         imageRes,
-                        System.currentTimeMillis()
+                        System.currentTimeMillis(), // 9º argumento: createdAt (long)
+                        "PENDIENTE"
                 );
 
                 reservationsRepository.upsert(entity);

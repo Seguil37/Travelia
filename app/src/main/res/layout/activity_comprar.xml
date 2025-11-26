@@ -44,7 +44,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_logo"
+            android:src="@drawable/ic_usuario"
             android:scaleType="centerCrop"
             android:contentDescription="Perfil" />
     </LinearLayout>
@@ -72,7 +72,7 @@
                 android:text="Confirma tu reserva"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#1C1C1E" />
+                android:textColor="#fc7e7f" />
 
             <!-- Resumen dinámico -->
             <androidx.cardview.widget.CardView
@@ -92,7 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Resumen de tu reserva"
-                        android:textColor="#1C1C1E"
+                        android:textColor="#fc7e7f"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -157,7 +157,7 @@
                 android:text="Detalles del viajero"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#1C1C1E" />
+                android:textColor="#fc7e7f" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -178,7 +178,7 @@
                         android:text="Nombres completos"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="#333333" />
+                        android:textColor="#fc7e7f" />
 
                     <EditText
                         android:id="@+id/et_nombres"
@@ -199,7 +199,7 @@
                         android:text="Email"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="#333333" />
+                        android:textColor="#fc7e7f" />
 
                     <EditText
                         android:id="@+id/et_email"
@@ -220,7 +220,7 @@
                         android:text="Nacionalidad"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="#333333" />
+                        android:textColor="#fc7e7f" />
 
                     <Spinner
                         android:id="@+id/sp_nacionalidad"
@@ -237,7 +237,7 @@
                         android:text="Número de contacto"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:textColor="#333333" />
+                        android:textColor="#fc7e7f" />
 
                     <EditText
                         android:id="@+id/et_telefono"
@@ -261,7 +261,7 @@
                 android:text="Método de pago"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#1C1C1E" />
+                android:textColor="#fc7e7f" />
 
             <GridLayout
                 android:layout_width="match_parent"
@@ -294,8 +294,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/ic_carrito"
-                            app:tint="#333333" />
+                            android:src="@drawable/ic_credito"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -332,8 +331,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/ic_logo"
-                            app:tint="#0070BA" />
+                            android:src="@drawable/ic_paypal"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -370,8 +368,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/ic_home"
-                            app:tint="#333333" />
+                            android:src="@drawable/ic_transferencia" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -408,8 +405,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/ic_logo"
-                            app:tint="#722E9A" />
+                            android:src="@drawable/ic_yape"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -432,7 +428,7 @@
                 android:text="Resumen del pedido"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#1C1C1E" />
+                android:textColor="#fc7e7f" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -534,7 +530,7 @@
                             android:text="Total"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="#1C1C1E" />
+                            android:textColor="#fc7e7f" />
 
                         <TextView
                             android:layout_width="wrap_content"

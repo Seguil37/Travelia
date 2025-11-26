@@ -141,6 +141,18 @@
                 android:backgroundTint="#673AB7"
                 app:cornerRadius="10dp" />
 
+            <Button
+                android:id="@+id/btn_abrir_dialogo_registro"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginTop="12dp"
+                android:text="CREAR UNA CUENTA"
+                android:background="@drawable/rounded_button_gold"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:strokeWidth="2dp" />
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="match_parent"

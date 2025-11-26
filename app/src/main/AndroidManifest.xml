@@ -2,6 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,13 +24,17 @@
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Travelia">
-
-        <!-- API Key de Google Maps (puedes moverla a manifestPlaceholders luego) -->
+        <activity
+            android:name=".ui.CrearPublicacionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.CambiarContrasenaActivity"
+            android:exported="false"
+            android:label="Cambiar Contraseña"
+            android:theme="@style/Theme.Travelia" /> <!-- API Key de Google Maps (puedes moverla a manifestPlaceholders luego) -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAu4b0tfHYBpA09qO3pDRhKuJyUCP8H05c" />
-
-        <!-- Activities existentes -->
+            android:value="AIzaSyAu4b0tfHYBpA09qO3pDRhKuJyUCP8H05c" /> <!-- Activities existentes -->
         <activity
             android:name=".DetalleArticuloActivity"
             android:exported="false" />
@@ -32,9 +49,7 @@
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="false" />
-
-        <!-- NUEVAS: flujo de reservas/compra -->
+            android:exported="false" /> <!-- NUEVAS: flujo de reservas/compra -->
         <activity
             android:name=".ConfirmarReservaActivity"
             android:exported="false" />
@@ -43,17 +58,31 @@
             android:exported="false" />
         <activity
             android:name=".ConfirmarCompraActivity"
-            android:exported="false" />
-
-        <!-- Launcher -->
+            android:exported="false" /> <!-- Launcher -->
         <activity
             android:name=".BienvenidaActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.Usuario"
+            android:exported="false"
+            android:label="Perfil de Usuario"
+            android:theme="@style/Theme.Travelia" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <meta-data
             android:name="preloaded_fonts"

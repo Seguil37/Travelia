@@ -24,8 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_logo"
-            android:contentDescription="Logo"
-            app:tint="@color/white" />
+            android:contentDescription="Logo" />
 
         <Space
             android:layout_width="0dp"
@@ -44,7 +43,7 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/ic_logo"
+            android:src="@drawable/ic_usuario"
             android:scaleType="centerCrop"
             android:contentDescription="Perfil" />
     </LinearLayout>

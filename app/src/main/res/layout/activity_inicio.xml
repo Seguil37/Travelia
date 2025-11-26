@@ -5,48 +5,48 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F4F9"
+    android:background="#F8F9FA"
     tools:context=".InicioActivity">
 
     <LinearLayout
         android:id="@+id/top_bar"
         android:layout_width="0dp"
-        android:layout_height="60dp"
+        android:layout_height="70dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="20dp"
-        android:background="#FFC107"
+        android:paddingHorizontal="24dp"
+        android:background="@color/travelia_orange"
+        android:elevation="4dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:src="@drawable/ic_logo"
-            android:contentDescription="Logo"
-            app:tint="@color/white" />
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:contentDescription="Logo"/>
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="3"
+            android:layout_weight="1"
+            android:text="TRAVELIA"
             android:textColor="@color/white"
-            android:textSize="14sp"
             android:textStyle="bold"
-            android:layout_marginEnd="5dp" />
+            android:textSize="20sp"
+            android:layout_marginStart="12dp"
+            android:letterSpacing="0.1"/>
 
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_logo"
+            android:id="@+id/iv_profile_pic"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:src="@drawable/ic_usuario"
             android:scaleType="centerCrop"
-            android:contentDescription="Imagen de perfil" />
+            android:background="@drawable/circle_button_background"
+            android:padding="1dp"
+            android:contentDescription="Perfil"/>
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
@@ -62,74 +62,190 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="20dp">
 
-            <TextView
-                android:id="@+id/tv_saludo"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="HOLA USUARIO"
-                android:textColor="#fc7e7f"
-                android:textSize="26sp"
-                android:textStyle="bold" />
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingTop="24dp">
 
-            <TextView
-                android:id="@+id/tv_pregunta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="4dp"
-                android:text="¿Listo para tu próxima aventura?"
-                android:textColor="#888888"
-                android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/tv_saludo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HOLA USUARIO"
+                    android:textColor="#fc7e7f"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_pregunta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="¿Dónde quieres ir hoy?"
+                    android:textColor="#757575"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_mapa"
                 android:layout_width="match_parent"
-                android:layout_height="600dp"
+                android:layout_height="550dp"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="15dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp">
 
-                <fragment
-                    android:id="@+id/mapa"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:ignore="FragmentTagUsage" />
+                    android:layout_height="match_parent">
 
-                <EditText
-                    android:id="@+id/et_search_map"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/rounded_search_background"
-                    android:drawablePadding="10dp"
-                    android:elevation="6dp"
-                    android:hint="A donde quieres ir?"
-                    android:paddingHorizontal="15dp"
-                    android:textColorHint="#999999"
-                    android:textSize="16sp" />
+                    <fragment
+                        android:id="@+id/mapa"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        tools:ignore="FragmentTagUsage" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_buscador"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_margin="16dp"
+                        android:layout_alignParentTop="true"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="6dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/et_search_map"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/white"
+                            android:hint="Buscar destino turístico..."
+                            android:paddingStart="48dp"
+                            android:paddingEnd="16dp"
+                            android:textColor="#333333"
+                            android:textColorHint="#999999"
+                            android:textSize="15sp"
+                            android:inputType="textCapSentences"
+                            android:imeOptions="actionSearch"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:completionThreshold="1"
+                            android:dropDownHeight="200dp" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center_vertical|start"
+                            android:layout_marginStart="12dp"
+                            android:src="@android:drawable/ic_menu_search"
+                            app:tint="#FF9800"/>
+                    </androidx.cardview.widget.CardView>
+
+                    <ImageButton
+                        android:id="@+id/btn_map_layers"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:layout_below="@id/card_buscador"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/circle_button_background"
+                        android:src="@android:drawable/ic_menu_mapmode"
+                        android:padding="10dp"
+                        android:elevation="6dp"
+                        app:tint="#555555" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/panel_map_layers"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/btn_map_layers"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginTop="8dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="8dp"
+                        app:cardBackgroundColor="@color/white"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <TextView
+                                android:id="@+id/opt_normal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="🗺️ Turístico"
+                                android:padding="10dp"
+                                android:textColor="#333333"
+                                android:background="?attr/selectableItemBackground"/>
+
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+
+                            <TextView
+                                android:id="@+id/opt_satellite"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="🛰️ Satélite"
+                                android:padding="10dp"
+                                android:textColor="#333333"
+                                android:background="?attr/selectableItemBackground"/>
+
+                            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+
+                            <TextView
+                                android:id="@+id/opt_terrain"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="🏔️ Relieve"
+                                android:padding="10dp"
+                                android:textColor="#333333"
+                                android:background="?attr/selectableItemBackground"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                        android:id="@+id/btn_directions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_margin="20dp"
+                        android:text="CÓMO LLEGAR"
+                        android:textColor="@color/white"
+                        android:textSize="13sp"
+                        app:backgroundTint="#fc7e7f"
+                        app:icon="@android:drawable/ic_menu_directions"
+                        app:iconTint="@color/white"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
+
+                </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="30dp">
 
                 <TextView
                     android:id="@+id/tv_recomendado_titulo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Recomendado para ti"
-                    android:textColor="#333333"
-                    android:textSize="18sp"
+                    android:textColor="#263238"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -139,7 +255,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:text="Ver todo"
-                    android:textColor="#FFC107"
+                    android:textColor="#FF9800"
+                    android:textStyle="bold"
                     android:textSize="14sp" />
             </RelativeLayout>
 
@@ -147,11 +264,11 @@
                 android:id="@+id/hscroll_recomendaciones"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="16dp"
                 android:clipToPadding="false"
                 android:paddingStart="20dp"
-                android:paddingEnd="20dp">
+                android:paddingEnd="20dp"
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/container_recomendaciones"
@@ -165,10 +282,15 @@
 
     <com.proyecto.travelia.ui.BottomNavView
         android:id="@+id/bottom_nav"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"
+
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

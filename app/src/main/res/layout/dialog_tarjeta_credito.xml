@@ -21,7 +21,7 @@
             android:text="Card Number"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#666666" />
+            android:textColor="#fc7e7f" />
 
         <EditText
             android:id="@+id/et_card_number"
@@ -55,7 +55,7 @@
                     android:text="Expiry Date"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#666666" />
+                    android:textColor="#fc7e7f" />
 
                 <EditText
                     android:id="@+id/et_expiry_date"
@@ -83,7 +83,7 @@
                     android:text="CVV"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:textColor="#666666" />
+                    android:textColor="#fc7e7f" />
 
                 <EditText
                     android:id="@+id/et_cvv"
@@ -107,7 +107,7 @@
             android:text="Name on Card"
             android:textSize="14sp"
             android:textStyle="bold"
-            android:textColor="#666666" />
+            android:textColor="#fc7e7f" />
 
         <EditText
             android:id="@+id/et_card_name"
@@ -156,9 +156,9 @@
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:background="@drawable/rounded_circle_white_bg"
+                android:background="@drawable/rounded_button_gold"
                 android:text="Cancelar"
-                android:textColor="#666666"
+                android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textSize="15sp"
                 android:textStyle="bold" />
