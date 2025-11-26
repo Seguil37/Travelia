@@ -80,6 +80,7 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.VH> 
         // Abrir detalle
         h.btnDetalles.setOnClickListener(v -> {
             Intent intent = new Intent(ctx, DetalleArticuloActivity.class);
+            intent.putExtra("id", f.itemId);
             intent.putExtra("titulo", f.title);
             intent.putExtra("ubicacion", f.location);
             intent.putExtra("precio", f.price != null ? "S/" + f.price.intValue() : "--");

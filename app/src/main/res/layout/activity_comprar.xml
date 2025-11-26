@@ -533,9 +533,10 @@
                             android:textColor="#fc7e7f" />
 
                         <TextView
+                            android:id="@+id/tv_total_resumen"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="S/1940.00"
+                            android:text="S/0.00"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:textColor="#1C1C1E" />
@@ -550,7 +551,7 @@
                 android:layout_height="56dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/rounded_button_gold"
-                android:text="Pagar S/1940.00"
+                android:text="Pagar S/0.00"
                 android:textColor="@color/white"
                 android:textAllCaps="false"
                 android:textSize="16sp"
