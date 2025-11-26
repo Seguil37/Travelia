@@ -135,6 +135,7 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/btn_categoria_tours"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
                         android:layout_marginEnd="10dp"
@@ -146,6 +147,7 @@
                         android:textSize="14sp"/>
 
                     <Button
+                        android:id="@+id/btn_categoria_relax"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
                         android:layout_marginEnd="10dp"
@@ -156,6 +158,7 @@
                         android:textSize="14sp"/>
 
                     <Button
+                        android:id="@+id/btn_categoria_cabanas"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
                         android:layout_marginEnd="10dp"
@@ -166,6 +169,7 @@
                         android:textSize="14sp"/>
 
                     <Button
+                        android:id="@+id/btn_categoria_rutas"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
                         android:layout_marginEnd="10dp"
@@ -176,6 +180,7 @@
                         android:textSize="14sp"/>
 
                     <Button
+                        android:id="@+id/btn_categoria_hoteles"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
                         android:layout_marginEnd="10dp"
@@ -186,6 +191,7 @@
                         android:textSize="14sp"/>
 
                     <Button
+                        android:id="@+id/btn_categoria_alimentacion"
                         android:layout_width="wrap_content"
                         android:layout_height="38dp"
                         android:paddingHorizontal="20dp"
@@ -193,8 +199,8 @@
                         android:text="Alimentacion"
                         android:textAllCaps="false"
                         android:textSize="14sp"/>
-                </LinearLayout>
-            </HorizontalScrollView>
+            </LinearLayout>
+        </HorizontalScrollView>
 
             <!-- FILTROS -->
             <LinearLayout
@@ -281,23 +287,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="16dp"
-                android:text="42 artículos encontrados"
+                android:text="0 artículos encontrados"
                 android:textColor="#333333"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <!-- GRILLA 2xN -->
-            <GridLayout
-                android:id="@+id/grid_rutas"
+            <TextView
+                android:id="@+id/tv_empty_destinos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="8dp"
+                android:text="No se encontraron resultados"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:visibility="gone" />
+
+            <!-- Lista -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_destinos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="12dp"
-                android:columnCount="2"
-                android:alignmentMode="alignBounds"
-                android:columnOrderPreserved="false"
-                android:useDefaultMargins="false" />
-            <!-- tarjetas dinámicas -->
+                android:clipToPadding="false"
+                android:paddingBottom="8dp"
+                tools:listitem="@layout/card_destino" />
             <!-- CTA -->
             <Button
                 android:id="@+id/btn_mas_rutas"
