@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Precio mínimo (S/)"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/et_precio_min"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/rounded_edittext"
+            android:inputType="number"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="10dp"
+            android:hint="Ej. 150" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Rating mínimo"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/et_rating_min"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/rounded_edittext"
+            android:inputType="numberDecimal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="10dp"
+            android:hint="Ej. 4.5" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="Tags"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="6dp">
+
+            <CheckBox
+                android:id="@+id/cb_aventura"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aventura" />
+
+            <CheckBox
+                android:id="@+id/cb_cultural"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cultural" />
+
+            <CheckBox
+                android:id="@+id/cb_familia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Familia" />
+
+            <CheckBox
+                android:id="@+id/cb_relax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Relax" />
+
+            <CheckBox
+                android:id="@+id/cb_gastronomia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gastronomía" />
+
+            <CheckBox
+                android:id="@+id/cb_naturaleza"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Naturaleza" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
