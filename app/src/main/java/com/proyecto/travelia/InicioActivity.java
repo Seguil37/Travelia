@@ -1,7 +1,6 @@
 package com.proyecto.travelia;
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
@@ -52,7 +50,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.proyecto.travelia.ui.Usuario;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
@@ -63,7 +60,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class InicioActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class InicioActivity extends BaseActivity implements OnMapReadyCallback {
     private GoogleMap mMaps;
     private AutoCompleteTextView etSearchMap;
 
@@ -88,6 +85,7 @@ public class InicioActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_inicio);
+        setupTopBar();
         // Inicializar cliente de volley
         volleyQueue = Volley.newRequestQueue(this);
 
@@ -152,14 +150,7 @@ public class InicioActivity extends AppCompatActivity implements OnMapReadyCallb
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
         if (mapFragment != null) mapFragment.getMapAsync(this);
 
-        // 5. Perfil
-        ImageView profileImage = findViewById(R.id.iv_profile_pic);
-        profileImage.setOnClickListener(view -> {
-            Intent intent = new Intent(InicioActivity.this, Usuario.class);
-            startActivity(intent);
-        });
-
-        // 6. Cargar Secciones (Usando los métodos auxiliares para no duplicar código)
+        // 5. Cargar Secciones (Usando los métodos auxiliares para no duplicar código)
         setupRecommendations();
         setupBottomNav();
         db = FirebaseFirestore.getInstance();

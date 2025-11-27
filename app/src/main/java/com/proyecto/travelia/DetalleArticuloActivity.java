@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -37,7 +36,7 @@ import com.proyecto.travelia.ui.reviews.ReviewsAdapter;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class DetalleArticuloActivity extends AppCompatActivity {
+public class DetalleArticuloActivity extends BaseActivity {
 
     private TextView tvTituloDetalle, tvValoracion, tvDuracion, tvIncluye;
     private TextView tvServicios, tvIdiomas, tvUbicacionDetalle, tvDescripcion;
@@ -63,6 +62,7 @@ public class DetalleArticuloActivity extends AppCompatActivity {
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_detalle_articulo);
+        setupTopBar();
 
         // 🔧 Igual que Favoritos: bottom = 0
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
