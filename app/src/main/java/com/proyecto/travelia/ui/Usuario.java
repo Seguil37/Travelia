@@ -183,7 +183,7 @@ public class Usuario extends AppCompatActivity {
                     .setTitle("Cerrar Sesión")
                     .setMessage("¿Estás seguro?")
                     .setPositiveButton("Sí", (dialog, which) -> {
-                        prefs.edit().clear().apply();
+                        prefs.edit().putBoolean(Constantes.KEY_IS_LOGGED, false).apply();
                         Intent intent = new Intent(Usuario.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);

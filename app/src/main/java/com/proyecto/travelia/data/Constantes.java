@@ -11,4 +11,6 @@ public class Constantes {
     public static final String KEY_CURRENCY = "userCurrency";
     public static final String KEY_SEAT_PREF = "userSeatPreference";
     public static final String KEY_OFFER_ALERTS = "offerAlertsEnabled";
+    public static final String KEY_IS_LOGGED = "isLoggedIn";
+
 }

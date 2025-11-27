@@ -123,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
             editor.putString(Constantes.KEY_EMAIL, email);
             editor.putString(Constantes.KEY_NAME, nombre != null ? nombre : "Viajero");
             editor.putString(Constantes.KEY_PASSWORD, uid); // Guardado técnico
+            editor.putBoolean(Constantes.KEY_IS_LOGGED, true);
             editor.apply();
 
             Toast.makeText(this, "¡Bienvenido " + nombre + "!", Toast.LENGTH_SHORT).show();
@@ -160,6 +161,8 @@ public class LoginActivity extends AppCompatActivity {
         if (usuarioIngresado.equals(savedEmail) && contrasenaIngresada.equals(savedPassword)) {
 
             Toast.makeText(this, "Inicio de sesión correcto", Toast.LENGTH_SHORT).show();
+
+            prefs.edit().putBoolean(Constantes.KEY_IS_LOGGED, true).apply();
 
             // Navegar a la pantalla principal
             Intent intent = new Intent(LoginActivity.this, InicioActivity.class);
