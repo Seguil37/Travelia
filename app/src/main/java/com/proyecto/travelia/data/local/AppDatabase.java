@@ -4,13 +4,13 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import java.util.concurrent.ExecutorService; // <-- NUEVO IMPORT
-import java.util.concurrent.Executors;
-@Database(entities = {FavoriteEntity.class, ReservationEntity.class}, version = 3)
+
+@Database(entities = {FavoriteEntity.class, ReservationEntity.class, ReviewEntity.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract FavoritesDao favoritesDao();
     public abstract ReservationDao reservationDao();
+    public abstract ReviewDao reviewDao();
 
     private static volatile AppDatabase INSTANCE;
 

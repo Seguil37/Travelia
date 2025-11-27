@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="12dp"
+    android:paddingHorizontal="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_reviewer_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Invitado"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:textColor="#1C1C1E" />
+
+        <RatingBar
+            android:id="@+id/rating_review"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:scaleX="0.9"
+            android:scaleY="0.9" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_review_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="hoy"
+        android:textSize="11sp"
+        android:textColor="#999999" />
+
+    <TextView
+        android:id="@+id/tv_review_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Comentario"
+        android:textSize="13sp"
+        android:textColor="#333333"
+        android:lineSpacingExtra="2dp" />
+</LinearLayout>
