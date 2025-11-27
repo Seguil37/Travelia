@@ -44,6 +44,7 @@ public class ExplorarActivity extends AppCompatActivity {
     private FavoritesRepository favRepo;
     private GridLayout grid;
     private TextView tvContador;
+    private Button btnFiltros;
     private Spinner spOrden;
     private String searchQuery = "";
     private double minPrice = 0;
@@ -90,7 +91,7 @@ public class ExplorarActivity extends AppCompatActivity {
             public void onNothingSelected(android.widget.AdapterView<?> parent) { }
         });
 
-        Button btnFiltros = findViewById(R.id.btn_filtros);
+        btnFiltros = findViewById(R.id.btn_filtros);
         btnFiltros.setOnClickListener(v -> showFiltersDialog());
 
         Button btnMas = findViewById(R.id.btn_mas_rutas);
@@ -99,6 +100,9 @@ public class ExplorarActivity extends AppCompatActivity {
 
         grid = findViewById(R.id.grid_rutas);
         tvContador = findViewById(R.id.tv_contador);
+        grid.setAlignmentMode(GridLayout.ALIGN_MARGINS);
+        grid.setUseDefaultMargins(true);
+        grid.setColumnOrderPreserved(false);
 
         setupSearchBar();
         setupCategoryButtons();
@@ -137,6 +141,24 @@ public class ExplorarActivity extends AppCompatActivity {
         setupCategoryListener(btnRutas, "Rutas");
         setupCategoryListener(btnHoteles, "Hoteles");
         setupCategoryListener(btnAlimentacion, "Alimentación");
+    }
+
+    private void resetCategoryButtons() {
+        int[] ids = new int[]{
+                R.id.btn_cat_tours,
+                R.id.btn_cat_relax,
+                R.id.btn_cat_cabanas,
+                R.id.btn_cat_rutas,
+                R.id.btn_cat_hoteles,
+                R.id.btn_cat_alimentacion
+        };
+
+        for (int id : ids) {
+            Button button = findViewById(id);
+            if (button != null) {
+                button.setBackgroundResource(R.drawable.rounded_button_social);
+            }
+        }
     }
 
     private void setupCategoryListener(Button button, String category) {
@@ -207,6 +229,7 @@ public class ExplorarActivity extends AppCompatActivity {
 
         sortFiltered(filtered);
         tvContador.setText(String.format(Locale.getDefault(), "%d artículos encontrados", filtered.size()));
+        updateFilterLabel();
         renderCards(filtered);
     }
 
@@ -245,8 +268,7 @@ public class ExplorarActivity extends AppCompatActivity {
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = 0;
         params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
-        params.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
+        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f);
         params.setMargins(4, 4, 4, 4);
         card.setLayoutParams(params);
 
@@ -366,6 +388,8 @@ public class ExplorarActivity extends AppCompatActivity {
                     selectedTags.clear();
                     minPrice = 0;
                     minRating = 0;
+                    selectedCategories.clear();
+                    resetCategoryButtons();
                     applyFilters();
                 })
                 .setNegativeButton("Cancelar", null)
@@ -394,6 +418,23 @@ public class ExplorarActivity extends AppCompatActivity {
             this.precioValor = precioValor; this.ratingValor = ratingValor;
             this.categorias = categorias; this.tags = tags;
             this.imageRes = img; this.createdAt = createdAt;
+        }
+    }
+
+    private void updateFilterLabel() {
+        if (btnFiltros == null) return;
+
+        int filtersCount = 0;
+        filtersCount += selectedCategories.size();
+        filtersCount += selectedTags.size();
+        if (minPrice > 0) filtersCount++;
+        if (minRating > 0) filtersCount++;
+        if (!searchQuery.isEmpty()) filtersCount++;
+
+        if (filtersCount == 0) {
+            btnFiltros.setText("Filtros");
+        } else {
+            btnFiltros.setText(String.format(Locale.getDefault(), "Filtros (%d)", filtersCount));
         }
     }
 }
