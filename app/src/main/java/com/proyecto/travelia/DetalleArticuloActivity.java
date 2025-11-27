@@ -1,24 +1,38 @@
 package com.proyecto.travelia;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.RecyclerView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.proyecto.travelia.data.ReservationsRepository;
+import com.proyecto.travelia.data.ReviewRepository;
+import com.proyecto.travelia.data.Constantes;
 import com.proyecto.travelia.data.local.ReservationEntity;
+import com.proyecto.travelia.data.local.ReviewEntity;
 import com.proyecto.travelia.ui.BottomNavView;
+import com.proyecto.travelia.ui.reviews.ReviewsAdapter;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -28,12 +42,17 @@ public class DetalleArticuloActivity extends AppCompatActivity {
     private TextView tvTituloDetalle, tvValoracion, tvDuracion, tvIncluye;
     private TextView tvServicios, tvIdiomas, tvUbicacionDetalle, tvDescripcion;
     private TextView tvPrecioDetalle, tvFecha;
+    private TextView tvReviewAverage, tvReviewCount, tvEmptyReviews;
+    private RatingBar ratingAverage;
+    private RecyclerView rvReviews;
     private ImageView ivDetalleImagen;
     private Spinner spAdultos, spIdioma;
     private Button btnRegresar, btnVerDisponibilidad, btnReservar;
     private Button btnEscribirOpinion, btnVerMasResenas;
 
     private ReservationsRepository reservationsRepository;
+    private ReviewRepository reviewRepository;
+    private ReviewsAdapter reviewsAdapter;
     private String tourId;
     private int imageRes;
     private double priceValue;
@@ -57,6 +76,7 @@ public class DetalleArticuloActivity extends AppCompatActivity {
         loadArticleData();
         setupSpinners();
         setupListeners();
+        setupReviewsSection();
     }
 
     private void initViews() {
@@ -71,6 +91,12 @@ public class DetalleArticuloActivity extends AppCompatActivity {
         tvPrecioDetalle = findViewById(R.id.tv_precio_detalle);
         tvFecha = findViewById(R.id.tv_fecha);
         ivDetalleImagen = findViewById(R.id.iv_detalle_imagen);
+
+        tvReviewAverage = findViewById(R.id.tv_review_average);
+        tvReviewCount = findViewById(R.id.tv_review_count);
+        tvEmptyReviews = findViewById(R.id.tv_empty_reviews);
+        ratingAverage = findViewById(R.id.rating_average);
+        rvReviews = findViewById(R.id.rv_reviews);
 
         spAdultos = findViewById(R.id.sp_adultos);
         spIdioma = findViewById(R.id.sp_idioma);
@@ -162,11 +188,99 @@ public class DetalleArticuloActivity extends AppCompatActivity {
             }
         });
 
-        btnEscribirOpinion.setOnClickListener(v ->
-                Toast.makeText(this, "Función de escribir opinión", Toast.LENGTH_SHORT).show());
+        btnEscribirOpinion.setOnClickListener(v -> showAddReviewDialog());
 
-        btnVerMasResenas.setOnClickListener(v ->
-                Toast.makeText(this, "Cargar más reseñas...", Toast.LENGTH_SHORT).show());
+        btnVerMasResenas.setOnClickListener(v -> {
+            if (rvReviews.getAdapter() != null && rvReviews.getAdapter().getItemCount() > 0) {
+                rvReviews.smoothScrollToPosition(0);
+            } else {
+                Toast.makeText(this, "Aún no hay reseñas para mostrar", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupReviewsSection() {
+        reviewRepository = new ReviewRepository(this);
+        reviewsAdapter = new ReviewsAdapter();
+        rvReviews.setLayoutManager(new LinearLayoutManager(this));
+        rvReviews.setAdapter(reviewsAdapter);
+
+        String reviewKey = getReviewTourId();
+
+        reviewRepository.observeReviews(reviewKey).observe(this, list -> {
+            reviewsAdapter.submit(list);
+            tvEmptyReviews.setVisibility(list == null || list.isEmpty() ? View.VISIBLE : View.GONE);
+        });
+
+        reviewRepository.observeAverage(reviewKey).observe(this, avg -> {
+            float rating = avg != null ? avg.floatValue() : 0f;
+            ratingAverage.setRating(rating);
+            tvReviewAverage.setText(String.format(Locale.getDefault(), "%.1f", rating));
+        });
+
+        reviewRepository.observeCount(reviewKey).observe(this, count -> {
+            int safeCount = count == null ? 0 : count;
+            if (safeCount == 0) {
+                tvReviewCount.setText("Sin opiniones todavía");
+            } else if (safeCount == 1) {
+                tvReviewCount.setText("Basada en 1 opinión");
+            } else {
+                tvReviewCount.setText(String.format(Locale.getDefault(), "Basada en %d opiniones", safeCount));
+            }
+        });
+    }
+
+    private void showAddReviewDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View dialogView = inflater.inflate(R.layout.dialog_add_review, null, false);
+
+        RatingBar ratingInput = dialogView.findViewById(R.id.rating_input);
+        EditText etComment = dialogView.findViewById(R.id.et_review_comment);
+        TextView tvUserLabel = dialogView.findViewById(R.id.tv_user_label);
+        String userName = getCurrentUserName();
+        tvUserLabel.setText("Publicarás como " + userName);
+
+        new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setNegativeButton("Cancelar", (d, w) -> d.dismiss())
+                .setPositiveButton("Publicar", (dialog, which) -> {
+                    float rating = ratingInput.getRating();
+                    String comment = etComment.getText().toString().trim();
+
+                    if (rating == 0f) {
+                        Toast.makeText(this, "Selecciona una valoración", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (TextUtils.isEmpty(comment)) {
+                        Toast.makeText(this, "Escribe un comentario", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    ReviewEntity entity = new ReviewEntity(
+                            getReviewTourId(),
+                            userName,
+                            rating,
+                            comment,
+                            System.currentTimeMillis()
+                    );
+                    reviewRepository.addReview(entity);
+                    Toast.makeText(this, "¡Gracias por tu aporte!", Toast.LENGTH_SHORT).show();
+                })
+                .show();
+    }
+
+    private String getReviewTourId() {
+        if (tourId != null && !tourId.isEmpty()) return tourId;
+        CharSequence title = tvTituloDetalle.getText();
+        return title != null ? title.toString() : "tour";
+    }
+
+    private String getCurrentUserName() {
+        SharedPreferences prefs = getSharedPreferences(Constantes.PREFS_USUARIO, Context.MODE_PRIVATE);
+        String saved = prefs.getString(Constantes.KEY_NAME, null);
+        if (saved != null && !saved.trim().isEmpty()) return saved.trim();
+        return "Invitado";
     }
 
     private void showDatePicker() {
