@@ -6,13 +6,13 @@ import android.graphics.Rect;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.proyecto.travelia.BaseActivity;
 import com.proyecto.travelia.R;
 import com.proyecto.travelia.data.FavoritesRepository;
 import com.proyecto.travelia.data.local.FavoriteEntity;
@@ -20,7 +20,7 @@ import com.proyecto.travelia.ui.BottomNavView;
 
 import java.util.List;
 
-public class FavoritosActivity extends AppCompatActivity {
+public class FavoritosActivity extends BaseActivity {
 
     private FavoritesRepository repo;
     private FavoritosAdapter adapter;
@@ -30,6 +30,7 @@ public class FavoritosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_favoritos);
+        setupTopBar();
 
         // Edge-to-edge: el BottomNav maneja el margen inferior
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

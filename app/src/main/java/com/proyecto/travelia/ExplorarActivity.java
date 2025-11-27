@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -39,7 +38,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
-public class ExplorarActivity extends AppCompatActivity {
+public class ExplorarActivity extends BaseActivity {
 
     private FavoritesRepository favRepo;
     private GridLayout grid;
@@ -57,6 +56,7 @@ public class ExplorarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_explorar);
+        setupTopBar();
 
         // Edge-to-edge: bottom lo maneja el BottomNav
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

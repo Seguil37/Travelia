@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -26,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class ConfirmarReservaActivity extends AppCompatActivity {
+public class ConfirmarReservaActivity extends BaseActivity {
 
     private TextView tvTotal;
     private Button btnContinuarCompra;
@@ -42,6 +41,7 @@ public class ConfirmarReservaActivity extends AppCompatActivity {
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_confirmar_reserva);
+        setupTopBar();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets sb = insets.getInsets(WindowInsetsCompat.Type.systemBars());
