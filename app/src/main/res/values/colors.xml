@@ -3,4 +3,11 @@
     <color name="travelia_orange">#FFC107</color> <color name="travelia_orange_dark">#FFC107</color> <color name="travelia_bg_light">#FFF8E1</color> <color name="text_dark">#37474F</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Extras UI explora -->
+    <color name="chip_soft_blue">#E3F2FD</color>
+    <color name="chip_soft_green">#E8F5E9</color>
+    <color name="chip_soft_pink">#FCE4EC</color>
+    <color name="chip_soft_purple">#F3E5F5</color>
+    <color name="chip_soft_orange">#FFF3E0</color>
 </resources>
