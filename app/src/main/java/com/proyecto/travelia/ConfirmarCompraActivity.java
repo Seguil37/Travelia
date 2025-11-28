@@ -89,21 +89,31 @@ public class ConfirmarCompraActivity extends BaseActivity {
         double total = 0d;
 
         for (ReservationEntity entity : currentReservations) {
-            android.view.View view = getLayoutInflater().inflate(R.layout.item_reserva, layoutReservas, false);
+            android.view.View view = getLayoutInflater().inflate(R.layout.item_card_tour, layoutReservas, false);
 
-            TextView tvTitulo = view.findViewById(R.id.tv_reserva_titulo);
-            TextView tvUbicacion = view.findViewById(R.id.tv_reserva_ubicacion);
+            TextView tvTitulo = view.findViewById(R.id.tv_titulo);
+            TextView tvUbicacion = view.findViewById(R.id.tv_ubicacion);
+            View metaContainer = view.findViewById(R.id.reservation_meta_container);
             TextView tvFecha = view.findViewById(R.id.tv_reserva_fecha);
             TextView tvParticipantes = view.findViewById(R.id.tv_reserva_participantes);
-            TextView tvPrecio = view.findViewById(R.id.tv_reserva_precio);
-            ImageView ivImagen = view.findViewById(R.id.iv_reserva);
+            TextView tvPrecio = view.findViewById(R.id.tv_precio_desde);
+            TextView tvEstrellas = view.findViewById(R.id.tv_rating_estrellas);
+            TextView tvRatingTxt = view.findViewById(R.id.tv_rating_texto);
+            ImageView ivImagen = view.findViewById(R.id.iv_destino_big);
             ImageButton btnEliminar = view.findViewById(R.id.btn_eliminar_reserva);
+            Button btnVerDetalles = view.findViewById(R.id.btn_ver_detalles);
+            ImageView ivFav = view.findViewById(R.id.iv_favorito);
 
             tvTitulo.setText(entity.title);
             tvUbicacion.setText(entity.location);
-            tvFecha.setText(entity.date);
-            tvParticipantes.setText(entity.participants);
+            metaContainer.setVisibility(View.VISIBLE);
+            tvFecha.setText("Fecha: " + entity.date);
+            tvParticipantes.setText("Personas: " + entity.participants);
             tvPrecio.setText(String.format(Locale.getDefault(), "S/%.2f", entity.price));
+            tvEstrellas.setText("☆☆☆☆☆");
+            tvRatingTxt.setText("Sin reseñas");
+            btnVerDetalles.setVisibility(View.GONE);
+            ivFav.setVisibility(View.GONE);
             if (entity.imageRes != 0) {
                 ivImagen.setImageResource(entity.imageRes);
             }

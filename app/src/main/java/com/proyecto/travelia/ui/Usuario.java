@@ -35,6 +35,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.proyecto.travelia.data.local.ReservationEntity;
 import com.proyecto.travelia.data.Constantes;
+import com.proyecto.travelia.ui.SpacingItemDecoration;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -125,6 +126,7 @@ public class Usuario extends AppCompatActivity {
         switchOfferAlerts = findViewById(R.id.switch_offer_alerts);
         rvReservations = findViewById(R.id.rv_reservations);
         rvReservations.setLayoutManager(new LinearLayoutManager(this));
+        rvReservations.addItemDecoration(new SpacingItemDecoration(this, 12));
     }
 
     private void loadUserData() {

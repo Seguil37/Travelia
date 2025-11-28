@@ -59,7 +59,7 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.VH> 
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_destino, parent, false);
+                .inflate(R.layout.item_card_tour, parent, false);
         return new VH(view);
     }
 
