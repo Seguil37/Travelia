@@ -62,7 +62,7 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:textColor="#1C1C1E"
-                android:maxLines="2"
+                android:maxLines="1"
                 android:ellipsize="end" />
 
             <!-- Ubicación -->
