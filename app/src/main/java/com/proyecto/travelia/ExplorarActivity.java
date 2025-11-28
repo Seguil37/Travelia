@@ -25,15 +25,18 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.proyecto.travelia.data.FavoritesRepository;
+import com.proyecto.travelia.data.ReviewRepository;
 import com.proyecto.travelia.data.local.FavoriteEntity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
@@ -46,9 +49,11 @@ public class ExplorarActivity extends BaseActivity {
     private String searchQuery = "";
     private double minPrice = 0;
     private double minRating = 0;
+    private ReviewRepository reviewRepository;
     private final Set<String> selectedCategories = new HashSet<>();
     private final Set<String> selectedTags = new HashSet<>();
     private final List<CardData> allCards = new ArrayList<>();
+    private final Map<String, RatingSnapshot> ratingSnapshots = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +70,7 @@ public class ExplorarActivity extends BaseActivity {
         });
 
         favRepo = new FavoritesRepository(this);
+        reviewRepository = new ReviewRepository(this);
 
         // BottomNav se encarga solo de la navegación con la configuración por defecto
 
@@ -95,6 +101,7 @@ public class ExplorarActivity extends BaseActivity {
         setupSearchBar();
         setupCategoryButtons();
         seedCards();
+        observeReviewStats();
         applyFilters();
     }
 
@@ -166,6 +173,24 @@ public class ExplorarActivity extends BaseActivity {
         );
     }
 
+    private void observeReviewStats() {
+        for (CardData card : allCards) {
+            String key = getReviewKey(card);
+            reviewRepository.observeAverage(key).observe(this, avg -> {
+                RatingSnapshot snapshot = ratingSnapshots.computeIfAbsent(key, k -> new RatingSnapshot());
+                snapshot.average = avg != null ? avg : 0d;
+                snapshot.hasAverage = avg != null;
+                applyFilters();
+            });
+
+            reviewRepository.observeCount(key).observe(this, count -> {
+                RatingSnapshot snapshot = ratingSnapshots.computeIfAbsent(key, k -> new RatingSnapshot());
+                snapshot.count = count != null ? count : 0;
+                applyFilters();
+            });
+        }
+    }
+
     private void applyFilters() {
         List<CardData> filtered = new ArrayList<>();
         String queryLower = searchQuery.toLowerCase(Locale.ROOT);
@@ -192,7 +217,9 @@ public class ExplorarActivity extends BaseActivity {
             }
 
             if (card.precioValor < minPrice) continue;
-            if (card.ratingValor < minRating) continue;
+
+            double effectiveRating = getEffectiveRating(card);
+            if (effectiveRating < minRating) continue;
 
             filtered.add(card);
         }
@@ -210,7 +237,7 @@ public class ExplorarActivity extends BaseActivity {
                 comparator = Comparator.comparingDouble(c -> c.precioValor);
                 break;
             case "Rating":
-                comparator = (c1, c2) -> Double.compare(c2.ratingValor, c1.ratingValor);
+                comparator = (c1, c2) -> Double.compare(getEffectiveRating(c2), getEffectiveRating(c1));
                 break;
             case "Nuevos":
                 comparator = (c1, c2) -> Long.compare(c2.createdAt, c1.createdAt);
@@ -256,8 +283,8 @@ public class ExplorarActivity extends BaseActivity {
         if (tvTitulo != null) tvTitulo.setText(d.titulo);
         if (tvUbic != null) tvUbic.setText(d.ubicacion);
         if (tvPrecio != null) tvPrecio.setText(d.precio);
-        if (tvEst != null) tvEst.setText(d.estrellas);
-        if (tvRat != null) tvRat.setText(d.ratingTxt);
+        if (tvEst != null) tvEst.setText(formatStars(d));
+        if (tvRat != null) tvRat.setText(formatRatingText(d));
         renderTags(tagContainer, d.tags);
 
         Executors.newSingleThreadExecutor().execute(() -> {
@@ -295,7 +322,7 @@ public class ExplorarActivity extends BaseActivity {
                 intent.putExtra("titulo", d.titulo);
                 intent.putExtra("ubicacion", d.ubicacion);
                 intent.putExtra("precio", d.precio);
-                intent.putExtra("rating", d.ratingTxt);
+                intent.putExtra("rating", formatRatingText(d));
                 intent.putExtra("imageRes", d.imageRes);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -303,6 +330,43 @@ public class ExplorarActivity extends BaseActivity {
         }
 
         return card;
+    }
+
+    private String getReviewKey(CardData card) {
+        return card.id != null && !card.id.isEmpty() ? card.id : card.titulo;
+    }
+
+    private double getEffectiveRating(CardData card) {
+        RatingSnapshot snapshot = ratingSnapshots.get(getReviewKey(card));
+        if (snapshot != null && snapshot.hasAverage && snapshot.count > 0) {
+            return snapshot.average;
+        }
+        return card.ratingValor;
+    }
+
+    private String formatRatingText(CardData card) {
+        RatingSnapshot snapshot = ratingSnapshots.get(getReviewKey(card));
+        if (snapshot != null && snapshot.count > 0 && snapshot.hasAverage) {
+            String label = snapshot.count == 1 ? "reseña" : "reseñas";
+            return String.format(Locale.getDefault(), "%.1f • %d %s", snapshot.average, snapshot.count, label);
+        }
+        if (snapshot != null && snapshot.count == 0) {
+            return "Sin reseñas";
+        }
+        return card.ratingTxt;
+    }
+
+    private String formatStars(CardData card) {
+        double rating = getEffectiveRating(card);
+        int filledStars = (int) Math.round(rating);
+        if (filledStars < 0) filledStars = 0;
+        if (filledStars > 5) filledStars = 5;
+
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < 5; i++) {
+            builder.append(i < filledStars ? '★' : '☆');
+        }
+        return builder.toString();
     }
 
     private void renderTags(LinearLayout container, List<String> tags) {
@@ -387,5 +451,11 @@ public class ExplorarActivity extends BaseActivity {
             this.categorias = categorias; this.tags = tags;
             this.imageRes = img; this.createdAt = createdAt;
         }
+    }
+
+    static class RatingSnapshot {
+        double average;
+        int count;
+        boolean hasAverage;
     }
 }
