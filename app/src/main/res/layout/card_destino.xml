@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="6dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,58 +20,63 @@
             android:layout_height="0dp"
             android:scaleType="centerCrop"
             android:src="@drawable/mapi"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintDimensionRatio="1:1" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Botón favorito -->
         <ImageView
             android:id="@+id/iv_favorito"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/selector_fav_heart"
-            android:background="@drawable/rounded_circle_white_bg"
-            android:padding="8dp"
             android:layout_margin="12dp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/rounded_circle_white_bg"
+            android:contentDescription="Favorito"
+            android:padding="8dp"
+            android:src="@drawable/selector_fav_heart"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="Favorito" />
-
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Contenido -->
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_height="0dp"
             android:background="@color/white"
             android:paddingHorizontal="14dp"
             android:paddingTop="12dp"
             android:paddingBottom="14dp"
-            app:layout_constraintTop_toBottomOf="@id/iv_destino_big"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/iv_destino_big">
 
             <!-- Título -->
             <TextView
                 android:id="@+id/tv_titulo"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Lago Titicaca"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="#1C1C1E"
+                android:ellipsize="end"
                 android:maxLines="2"
-                android:ellipsize="end" />
+                android:text="Lago Titicaca"
+                android:textColor="#1C1C1E"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <!-- Ubicación -->
             <LinearLayout
+                android:id="@+id/location_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="6dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_titulo">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -92,23 +97,29 @@
             <!-- Tags -->
             <LinearLayout
                 android:id="@+id/tag_container"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:orientation="horizontal"
-                android:gravity="start"
                 android:layout_marginBottom="4dp"
                 android:dividerPadding="4dp"
-                android:showDividers="middle">
-            </LinearLayout>
+                android:gravity="start"
+                android:orientation="horizontal"
+                android:showDividers="middle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/location_row" />
 
             <!-- Precio y Rating -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:id="@+id/row_price_rating"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="12dp"
                 android:gravity="center_vertical"
-                android:layout_marginTop="12dp">
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tag_container">
 
                 <!-- Precio -->
                 <LinearLayout
@@ -129,25 +140,25 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="S/380"
-                        android:textStyle="bold"
+                        android:textColor="#1C1C1E"
                         android:textSize="20sp"
-                        android:textColor="#1C1C1E" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <!-- Rating -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="end">
+                    android:gravity="end"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_rating_estrellas"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="★★★★☆"
-                        android:textSize="14sp"
-                        android:textColor="#FBC02D" />
+                        android:textColor="#FBC02D"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_rating_texto"
@@ -162,15 +173,19 @@
             <!-- Botón Ver detalles -->
             <Button
                 android:id="@+id/btn_ver_detalles"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/rounded_button_gold"
                 android:text="Ver detalles  →"
-                android:textColor="@color/white"
                 android:textAllCaps="false"
+                android:textColor="@color/white"
                 android:textSize="15sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/row_price_rating" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
