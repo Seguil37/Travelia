@@ -259,7 +259,7 @@ public class ExplorarActivity extends BaseActivity {
 
     private View createCard(CardData d) {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View card = inflater.inflate(R.layout.card_destino, grid, false);
+        View card = inflater.inflate(R.layout.item_card_tour, grid, false);
 
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
         params.width = 0;

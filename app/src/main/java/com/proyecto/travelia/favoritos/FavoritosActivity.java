@@ -2,8 +2,6 @@ package com.proyecto.travelia.favoritos;
 
 import android.os.Bundle;
 import android.widget.TextView;
-import android.graphics.Rect;
-import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -17,6 +15,7 @@ import com.proyecto.travelia.R;
 import com.proyecto.travelia.data.FavoritesRepository;
 import com.proyecto.travelia.data.ReviewRepository;
 import com.proyecto.travelia.data.local.FavoriteEntity;
+import com.proyecto.travelia.ui.SpacingItemDecoration;
 
 import java.util.List;
 
@@ -47,17 +46,8 @@ public class FavoritosActivity extends BaseActivity {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rv.setLayoutManager(gridLayoutManager);
 
-        // Agregar espaciado entre items
-        rv.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int spacing = 12; // espaciado en dp
-                outRect.left = spacing;
-                outRect.right = spacing;
-                outRect.top = spacing;
-                outRect.bottom = spacing;
-            }
-        });
+        // Agregar espaciado entre items reutilizable
+        rv.addItemDecoration(new SpacingItemDecoration(this, 12));
 
         adapter = new FavoritosAdapter(repo, reviewRepository, this, this);
         rv.setAdapter(adapter);
