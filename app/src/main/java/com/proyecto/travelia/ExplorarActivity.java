@@ -6,11 +6,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -19,9 +19,12 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.proyecto.travelia.data.FavoritesRepository;
@@ -43,7 +46,8 @@ import java.util.concurrent.Executors;
 public class ExplorarActivity extends BaseActivity {
 
     private FavoritesRepository favRepo;
-    private GridLayout grid;
+    private RecyclerView rvRutas;
+    private ExploreAdapter adapter;
     private TextView tvContador;
     private Spinner spOrden;
     private String searchQuery = "";
@@ -95,8 +99,23 @@ public class ExplorarActivity extends BaseActivity {
         btnMas.setOnClickListener(v ->
                 Toast.makeText(this, "Cargar más rutas…", Toast.LENGTH_SHORT).show());
 
-        grid = findViewById(R.id.grid_rutas);
+        rvRutas = findViewById(R.id.rv_rutas);
         tvContador = findViewById(R.id.tv_contador);
+
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        rvRutas.setLayoutManager(gridLayoutManager);
+        int spacing = getResources().getDimensionPixelSize(R.dimen.card_grid_spacing);
+        rvRutas.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(android.graphics.Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.left = spacing;
+                outRect.right = spacing;
+                outRect.top = spacing;
+                outRect.bottom = spacing;
+            }
+        });
+        adapter = new ExploreAdapter();
+        rvRutas.setAdapter(adapter);
 
         setupSearchBar();
         setupCategoryButtons();
@@ -226,7 +245,7 @@ public class ExplorarActivity extends BaseActivity {
 
         sortFiltered(filtered);
         tvContador.setText(String.format(Locale.getDefault(), "%d artículos encontrados", filtered.size()));
-        renderCards(filtered);
+        adapter.submit(filtered);
     }
 
     private void sortFiltered(List<CardData> filtered) {
@@ -249,74 +268,64 @@ public class ExplorarActivity extends BaseActivity {
         Collections.sort(filtered, comparator);
     }
 
-    private void renderCards(List<CardData> cards) {
-        grid.removeAllViews();
-        for (CardData d : cards) {
-            View card = createCard(d);
-            grid.addView(card);
+    private class ExploreAdapter extends RecyclerView.Adapter<ExploreAdapter.VH> {
+
+        private final List<CardData> items = new ArrayList<>();
+
+        void submit(List<CardData> list) {
+            items.clear();
+            if (list != null) items.addAll(list);
+            notifyDataSetChanged();
         }
-    }
 
-    private View createCard(CardData d) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View card = inflater.inflate(R.layout.card_destino, grid, false);
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.card_destino, parent, false);
+            return new VH(view);
+        }
 
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        params.width = 0;
-        params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
-        params.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
-        params.setMargins(4, 4, 4, 4);
-        card.setLayoutParams(params);
+        @Override
+        public void onBindViewHolder(@NonNull VH h, int position) {
+            CardData d = items.get(position);
+            h.ivFoto.setImageResource(d.imageRes);
+            h.tvTitulo.setText(d.titulo);
+            h.tvUbic.setText(d.ubicacion);
+            h.tvPrecio.setText(d.precio);
+            h.tvEstrellas.setText(formatStars(d));
+            h.tvRatingTxt.setText(formatRatingText(d));
+            renderTags(h.tagContainer, d.tags);
 
-        ImageView img = card.findViewById(R.id.iv_destino_big);
-        TextView tvTitulo = card.findViewById(R.id.tv_titulo);
-        TextView tvUbic = card.findViewById(R.id.tv_ubicacion);
-        TextView tvPrecio = card.findViewById(R.id.tv_precio_desde);
-        TextView tvEst = card.findViewById(R.id.tv_rating_estrellas);
-        TextView tvRat = card.findViewById(R.id.tv_rating_texto);
-        Button btnDetalles = card.findViewById(R.id.btn_ver_detalles);
-        ImageView ivFav = card.findViewById(R.id.iv_favorito);
-        LinearLayout tagContainer = card.findViewById(R.id.tag_container);
+            Executors.newSingleThreadExecutor().execute(() -> {
+                boolean isFav = favRepo.isFavoriteSync(d.id);
+                runOnUiThread(() -> h.ivFav.setSelected(isFav));
+            });
 
-        if (img != null) img.setImageResource(d.imageRes);
-        if (tvTitulo != null) tvTitulo.setText(d.titulo);
-        if (tvUbic != null) tvUbic.setText(d.ubicacion);
-        if (tvPrecio != null) tvPrecio.setText(d.precio);
-        if (tvEst != null) tvEst.setText(formatStars(d));
-        if (tvRat != null) tvRat.setText(formatRatingText(d));
-        renderTags(tagContainer, d.tags);
+            h.ivFav.setOnClickListener(v -> {
+                boolean nowSelected = !h.ivFav.isSelected();
+                h.ivFav.setSelected(nowSelected);
 
-        Executors.newSingleThreadExecutor().execute(() -> {
-            boolean isFav = favRepo.isFavoriteSync(d.id);
-            runOnUiThread(() -> ivFav.setSelected(isFav));
-        });
+                if (nowSelected) {
+                    FavoriteEntity e = new FavoriteEntity(
+                            "guest", d.id, "TOUR", d.titulo, d.ubicacion,
+                            "img_local", d.precioValor, d.ratingValor,
+                            System.currentTimeMillis()
+                    );
+                    Executors.newSingleThreadExecutor().execute(() -> favRepo.add(e));
 
-        ivFav.setOnClickListener(v -> {
-            boolean nowSelected = !ivFav.isSelected();
-            ivFav.setSelected(nowSelected);
+                    Snackbar.make(h.itemView, "¡Añadido a favoritos!", Snackbar.LENGTH_LONG)
+                            .setAction("Deshacer", a -> {
+                                h.ivFav.setSelected(false);
+                                Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
+                            }).show();
+                } else {
+                    Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
+                    Snackbar.make(h.itemView, "Eliminado de favoritos", Snackbar.LENGTH_SHORT).show();
+                }
+            });
 
-            if (nowSelected) {
-                FavoriteEntity e = new FavoriteEntity(
-                        "guest", d.id, "TOUR", d.titulo, d.ubicacion,
-                        "img_local", d.precioValor, d.ratingValor,
-                        System.currentTimeMillis()
-                );
-                Executors.newSingleThreadExecutor().execute(() -> favRepo.add(e));
-
-                Snackbar.make(card, "¡Añadido a favoritos!", Snackbar.LENGTH_LONG)
-                        .setAction("Deshacer", a -> {
-                            ivFav.setSelected(false);
-                            Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
-                        }).show();
-            } else {
-                Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
-                Snackbar.make(card, "Eliminado de favoritos", Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
-        if (btnDetalles != null) {
-            btnDetalles.setOnClickListener(v -> {
+            h.btnDetalles.setOnClickListener(v -> {
                 Intent intent = new Intent(ExplorarActivity.this, DetalleArticuloActivity.class);
                 intent.putExtra("id", d.id);
                 intent.putExtra("titulo", d.titulo);
@@ -329,7 +338,30 @@ public class ExplorarActivity extends BaseActivity {
             });
         }
 
-        return card;
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        class VH extends RecyclerView.ViewHolder {
+            final ImageView ivFoto, ivFav;
+            final TextView tvTitulo, tvUbic, tvPrecio, tvEstrellas, tvRatingTxt;
+            final Button btnDetalles;
+            final LinearLayout tagContainer;
+
+            VH(@NonNull View itemView) {
+                super(itemView);
+                ivFoto = itemView.findViewById(R.id.iv_destino_big);
+                ivFav = itemView.findViewById(R.id.iv_favorito);
+                tvTitulo = itemView.findViewById(R.id.tv_titulo);
+                tvUbic = itemView.findViewById(R.id.tv_ubicacion);
+                tvPrecio = itemView.findViewById(R.id.tv_precio_desde);
+                tvEstrellas = itemView.findViewById(R.id.tv_rating_estrellas);
+                tvRatingTxt = itemView.findViewById(R.id.tv_rating_texto);
+                btnDetalles = itemView.findViewById(R.id.btn_ver_detalles);
+                tagContainer = itemView.findViewById(R.id.tag_container);
+            }
+        }
     }
 
     private String getReviewKey(CardData card) {
