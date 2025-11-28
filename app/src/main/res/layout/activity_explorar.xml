@@ -294,17 +294,15 @@
                 android:textStyle="bold" />
 
             <!-- GRILLA 2xN -->
-            <GridLayout
-                android:id="@+id/grid_rutas"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_rutas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="12dp"
-                android:columnCount="2"
-                android:alignmentMode="alignBounds"
-                android:columnOrderPreserved="false"
-                android:useDefaultMargins="false" />
-            <!-- tarjetas dinámicas -->
+                android:clipToPadding="false"
+                android:paddingBottom="4dp" />
+
             <!-- CTA -->
             <Button
                 android:id="@+id/btn_mas_rutas"

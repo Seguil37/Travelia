@@ -6,11 +6,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -22,6 +22,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.proyecto.travelia.data.FavoritesRepository;
@@ -43,7 +45,7 @@ import java.util.concurrent.Executors;
 public class ExplorarActivity extends BaseActivity {
 
     private FavoritesRepository favRepo;
-    private GridLayout grid;
+    private RutasAdapter adapter;
     private TextView tvContador;
     private Spinner spOrden;
     private String searchQuery = "";
@@ -95,7 +97,21 @@ public class ExplorarActivity extends BaseActivity {
         btnMas.setOnClickListener(v ->
                 Toast.makeText(this, "Cargar más rutas…", Toast.LENGTH_SHORT).show());
 
-        grid = findViewById(R.id.grid_rutas);
+        RecyclerView rvRutas = findViewById(R.id.rv_rutas);
+        GridLayoutManager glm = new GridLayoutManager(this, 2);
+        rvRutas.setLayoutManager(glm);
+        int spacingPx = (int) (12 * getResources().getDisplayMetrics().density);
+        rvRutas.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(android.graphics.Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                outRect.left = spacingPx;
+                outRect.right = spacingPx;
+                outRect.top = spacingPx;
+                outRect.bottom = spacingPx;
+            }
+        });
+        adapter = new RutasAdapter();
+        rvRutas.setAdapter(adapter);
         tvContador = findViewById(R.id.tv_contador);
 
         setupSearchBar();
@@ -226,7 +242,7 @@ public class ExplorarActivity extends BaseActivity {
 
         sortFiltered(filtered);
         tvContador.setText(String.format(Locale.getDefault(), "%d artículos encontrados", filtered.size()));
-        renderCards(filtered);
+        adapter.submit(filtered);
     }
 
     private void sortFiltered(List<CardData> filtered) {
@@ -247,89 +263,6 @@ public class ExplorarActivity extends BaseActivity {
                 comparator = Comparator.comparing(c -> c.titulo.toLowerCase(Locale.ROOT));
         }
         Collections.sort(filtered, comparator);
-    }
-
-    private void renderCards(List<CardData> cards) {
-        grid.removeAllViews();
-        for (CardData d : cards) {
-            View card = createCard(d);
-            grid.addView(card);
-        }
-    }
-
-    private View createCard(CardData d) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View card = inflater.inflate(R.layout.card_destino, grid, false);
-
-        GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        params.width = 0;
-        params.height = GridLayout.LayoutParams.WRAP_CONTENT;
-        params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
-        params.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
-        params.setMargins(4, 4, 4, 4);
-        card.setLayoutParams(params);
-
-        ImageView img = card.findViewById(R.id.iv_destino_big);
-        TextView tvTitulo = card.findViewById(R.id.tv_titulo);
-        TextView tvUbic = card.findViewById(R.id.tv_ubicacion);
-        TextView tvPrecio = card.findViewById(R.id.tv_precio_desde);
-        TextView tvEst = card.findViewById(R.id.tv_rating_estrellas);
-        TextView tvRat = card.findViewById(R.id.tv_rating_texto);
-        Button btnDetalles = card.findViewById(R.id.btn_ver_detalles);
-        ImageView ivFav = card.findViewById(R.id.iv_favorito);
-        LinearLayout tagContainer = card.findViewById(R.id.tag_container);
-
-        if (img != null) img.setImageResource(d.imageRes);
-        if (tvTitulo != null) tvTitulo.setText(d.titulo);
-        if (tvUbic != null) tvUbic.setText(d.ubicacion);
-        if (tvPrecio != null) tvPrecio.setText(d.precio);
-        if (tvEst != null) tvEst.setText(formatStars(d));
-        if (tvRat != null) tvRat.setText(formatRatingText(d));
-        renderTags(tagContainer, d.tags);
-
-        Executors.newSingleThreadExecutor().execute(() -> {
-            boolean isFav = favRepo.isFavoriteSync(d.id);
-            runOnUiThread(() -> ivFav.setSelected(isFav));
-        });
-
-        ivFav.setOnClickListener(v -> {
-            boolean nowSelected = !ivFav.isSelected();
-            ivFav.setSelected(nowSelected);
-
-            if (nowSelected) {
-                FavoriteEntity e = new FavoriteEntity(
-                        "guest", d.id, "TOUR", d.titulo, d.ubicacion,
-                        "img_local", d.precioValor, d.ratingValor,
-                        System.currentTimeMillis()
-                );
-                Executors.newSingleThreadExecutor().execute(() -> favRepo.add(e));
-
-                Snackbar.make(card, "¡Añadido a favoritos!", Snackbar.LENGTH_LONG)
-                        .setAction("Deshacer", a -> {
-                            ivFav.setSelected(false);
-                            Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
-                        }).show();
-            } else {
-                Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
-                Snackbar.make(card, "Eliminado de favoritos", Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
-        if (btnDetalles != null) {
-            btnDetalles.setOnClickListener(v -> {
-                Intent intent = new Intent(ExplorarActivity.this, DetalleArticuloActivity.class);
-                intent.putExtra("id", d.id);
-                intent.putExtra("titulo", d.titulo);
-                intent.putExtra("ubicacion", d.ubicacion);
-                intent.putExtra("precio", d.precio);
-                intent.putExtra("rating", formatRatingText(d));
-                intent.putExtra("imageRes", d.imageRes);
-                startActivity(intent);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            });
-        }
-
-        return card;
     }
 
     private String getReviewKey(CardData card) {
@@ -457,5 +390,99 @@ public class ExplorarActivity extends BaseActivity {
         double average;
         int count;
         boolean hasAverage;
+    }
+
+    private class RutasAdapter extends RecyclerView.Adapter<RutasAdapter.VH> {
+        private final List<CardData> data = new ArrayList<>();
+
+        void submit(List<CardData> items) {
+            data.clear();
+            if (items != null) data.addAll(items);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.card_destino, parent, false);
+            return new VH(view);
+        }
+
+        @Override
+        public void onBindViewHolder(VH holder, int position) {
+            CardData d = data.get(position);
+
+            holder.img.setImageResource(d.imageRes);
+            holder.tvTitulo.setText(d.titulo);
+            holder.tvUbic.setText(d.ubicacion);
+            holder.tvPrecio.setText(d.precio);
+            holder.tvEstrellas.setText(formatStars(d));
+            holder.tvRating.setText(formatRatingText(d));
+            renderTags(holder.tagContainer, d.tags);
+
+            Executors.newSingleThreadExecutor().execute(() -> {
+                boolean isFav = favRepo.isFavoriteSync(d.id);
+                runOnUiThread(() -> holder.ivFav.setSelected(isFav));
+            });
+
+            holder.ivFav.setOnClickListener(v -> {
+                boolean nowSelected = !holder.ivFav.isSelected();
+                holder.ivFav.setSelected(nowSelected);
+
+                if (nowSelected) {
+                    FavoriteEntity e = new FavoriteEntity(
+                            "guest", d.id, "TOUR", d.titulo, d.ubicacion,
+                            "img_local", d.precioValor, d.ratingValor,
+                            System.currentTimeMillis()
+                    );
+                    Executors.newSingleThreadExecutor().execute(() -> favRepo.add(e));
+
+                    Snackbar.make(holder.itemView, "¡Añadido a favoritos!", Snackbar.LENGTH_LONG)
+                            .setAction("Deshacer", a -> {
+                                holder.ivFav.setSelected(false);
+                                Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
+                            }).show();
+                } else {
+                    Executors.newSingleThreadExecutor().execute(() -> favRepo.remove(d.id));
+                    Snackbar.make(holder.itemView, "Eliminado de favoritos", Snackbar.LENGTH_SHORT).show();
+                }
+            });
+
+            holder.btnDetalles.setOnClickListener(v -> {
+                Intent intent = new Intent(ExplorarActivity.this, DetalleArticuloActivity.class);
+                intent.putExtra("id", d.id);
+                intent.putExtra("titulo", d.titulo);
+                intent.putExtra("ubicacion", d.ubicacion);
+                intent.putExtra("precio", d.precio);
+                intent.putExtra("rating", formatRatingText(d));
+                intent.putExtra("imageRes", d.imageRes);
+                startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return data.size();
+        }
+
+        class VH extends RecyclerView.ViewHolder {
+            final ImageView img, ivFav;
+            final TextView tvTitulo, tvUbic, tvPrecio, tvEstrellas, tvRating;
+            final Button btnDetalles;
+            final LinearLayout tagContainer;
+
+            VH(View itemView) {
+                super(itemView);
+                img = itemView.findViewById(R.id.iv_destino_big);
+                ivFav = itemView.findViewById(R.id.iv_favorito);
+                tvTitulo = itemView.findViewById(R.id.tv_titulo);
+                tvUbic = itemView.findViewById(R.id.tv_ubicacion);
+                tvPrecio = itemView.findViewById(R.id.tv_precio_desde);
+                tvEstrellas = itemView.findViewById(R.id.tv_rating_estrellas);
+                tvRating = itemView.findViewById(R.id.tv_rating_texto);
+                btnDetalles = itemView.findViewById(R.id.btn_ver_detalles);
+                tagContainer = itemView.findViewById(R.id.tag_container);
+            }
+        }
     }
 }
