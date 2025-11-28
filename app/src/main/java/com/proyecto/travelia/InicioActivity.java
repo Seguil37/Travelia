@@ -158,6 +158,13 @@ public class InicioActivity extends BaseActivity implements OnMapReadyCallback {
 
         reviewRepository = new ReviewRepository(this);
         recommendationsContainer = findViewById(R.id.container_recomendaciones);
+        TextView tvVerTodo = findViewById(R.id.tv_ver_todo);
+        if (tvVerTodo != null) {
+            tvVerTodo.setOnClickListener(v -> {
+                Intent intent = new Intent(this, ExplorarActivity.class);
+                startActivity(intent);
+            });
+        }
 
         // 4. Mapa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);

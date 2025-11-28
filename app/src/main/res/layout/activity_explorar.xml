@@ -258,11 +258,15 @@
                     android:layout_marginEnd="8dp"/>
 
                 <LinearLayout
+                    android:id="@+id/btn_toggle_vista"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:background="@drawable/rounded_circle_white_bg"
                     android:gravity="center"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless">
 
                     <View
                         android:layout_width="18dp"

@@ -54,6 +54,7 @@ public class ExplorarActivity extends BaseActivity {
     private final Set<String> selectedTags = new HashSet<>();
     private final List<CardData> allCards = new ArrayList<>();
     private final Map<String, RatingSnapshot> ratingSnapshots = new HashMap<>();
+    private boolean useGridLayout = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,11 @@ public class ExplorarActivity extends BaseActivity {
         Button btnMas = findViewById(R.id.btn_mas_rutas);
         btnMas.setOnClickListener(v ->
                 Toast.makeText(this, "Cargar más rutas…", Toast.LENGTH_SHORT).show());
+
+        View btnToggleVista = findViewById(R.id.btn_toggle_vista);
+        if (btnToggleVista != null) {
+            btnToggleVista.setOnClickListener(v -> toggleLayoutMode());
+        }
 
         grid = findViewById(R.id.grid_rutas);
         tvContador = findViewById(R.id.tv_contador);
@@ -229,6 +235,18 @@ public class ExplorarActivity extends BaseActivity {
         renderCards(filtered);
     }
 
+    private void toggleLayoutMode() {
+        useGridLayout = !useGridLayout;
+        String message = useGridLayout ? "Vista en cuadrícula activada" : "Vista en lista activada";
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        applyFilters();
+    }
+
+    private int resolveColumnCount(int itemCount) {
+        if (!useGridLayout) return 1;
+        return itemCount <= 1 ? 1 : 2;
+    }
+
     private void sortFiltered(List<CardData> filtered) {
         String criterio = spOrden.getSelectedItem() != null ? spOrden.getSelectedItem().toString() : "Nombre";
         Comparator<CardData> comparator;
@@ -250,19 +268,21 @@ public class ExplorarActivity extends BaseActivity {
     }
 
     private void renderCards(List<CardData> cards) {
+        int columnCount = resolveColumnCount(cards.size());
+        grid.setColumnCount(columnCount);
         grid.removeAllViews();
         for (CardData d : cards) {
-            View card = createCard(d);
+            View card = createCard(d, columnCount);
             grid.addView(card);
         }
     }
 
-    private View createCard(CardData d) {
+    private View createCard(CardData d, int columnCount) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View card = inflater.inflate(R.layout.card_destino, grid, false);
 
         GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-        params.width = 0;
+        params.width = columnCount == 1 ? GridLayout.LayoutParams.MATCH_PARENT : 0;
         params.height = GridLayout.LayoutParams.WRAP_CONTENT;
         params.columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
         params.rowSpec = GridLayout.spec(GridLayout.UNDEFINED, 1, 1f);
