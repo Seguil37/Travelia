@@ -26,7 +26,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.proyecto.travelia.data.FavoritesRepository;
 import com.proyecto.travelia.data.local.FavoriteEntity;
-import com.proyecto.travelia.ui.BottomNavView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,14 +66,7 @@ public class ExplorarActivity extends BaseActivity {
 
         favRepo = new FavoritesRepository(this);
 
-        // BottomNav: acción especial para ADD (si quieres)
-        BottomNavView bottom = findViewById(R.id.bottom_nav);
-        if (bottom != null) {
-            bottom.setOnAddClickListener(v ->
-                    Toast.makeText(this, "Acción agregar (Explorar)", Toast.LENGTH_SHORT).show()
-            );
-            // bottom.setFinishOnNavigate(false); // si no quieres cerrar al navegar
-        }
+        // BottomNav se encarga solo de la navegación con la configuración por defecto
 
         spOrden = findViewById(R.id.sp_orden);
         String[] opciones = new String[]{"Nombre", "Precio", "Rating", "Nuevos"};

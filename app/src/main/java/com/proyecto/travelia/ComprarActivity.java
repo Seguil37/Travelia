@@ -99,9 +99,6 @@ public class ComprarActivity extends BaseActivity {
     private void setupBottomNav() {
         BottomNavView bottom = findViewById(R.id.bottom_nav);
         if (bottom != null) {
-            bottom.setOnAddClickListener(v ->
-                    Toast.makeText(this, "Acción agregar (Compra)", Toast.LENGTH_SHORT).show()
-            );
             bottom.highlight(BottomNavView.Tab.RESERVE);
         }
     }

@@ -16,7 +16,6 @@ import com.proyecto.travelia.BaseActivity;
 import com.proyecto.travelia.R;
 import com.proyecto.travelia.data.FavoritesRepository;
 import com.proyecto.travelia.data.local.FavoriteEntity;
-import com.proyecto.travelia.ui.BottomNavView;
 
 import java.util.List;
 
@@ -67,14 +66,6 @@ public class FavoritosActivity extends BaseActivity {
             if (title != null) title.setText("Mis favoritos (" + list.size() + ")");
         });
 
-        // BottomNav: acción especial para Agregar (opcional)
-        BottomNavView bottom = findViewById(R.id.bottom_nav);
-        if (bottom != null) {
-            bottom.setOnAddClickListener(v -> {
-                // TODO: abre tu Activity de creación/publicación si aplica
-                // startActivity(new Intent(this, CrearPublicacionActivity.class));
-            });
-            // bottom.setFinishOnNavigate(false); // si no quieres cerrar al navegar
-        }
+        // BottomNav usa la acción predeterminada para agregar
     }
 }
