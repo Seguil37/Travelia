@@ -146,8 +146,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="★★★★☆"
-                        android:textSize="14sp"
-                        android:textColor="#FBC02D" />
+                        android:textColor="#FBC02D"
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/tv_rating_texto"

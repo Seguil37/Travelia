@@ -155,21 +155,21 @@ public class ExplorarActivity extends BaseActivity {
     private void seedCards() {
         allCards.clear();
         Collections.addAll(allCards,
-                new CardData("T-001", "Machu Picchu Full Day", "Cusco, Perú", "S/280", "★★★★☆", "4.8 • 230 reseñas", 280,
+                new CardData("T-001", "Machu Picchu Full Day", "Cusco, Perú", "S/280", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 280,
                         4.8, Arrays.asList("Tours", "Rutas"), Arrays.asList("Aventura", "Cultural"),
                         R.drawable.mapi, System.currentTimeMillis() - 5000000L),
-                new CardData("T-002", "Lago Titicaca", "Puno, Perú", "S/380", "★★★★☆", "4.7 • 156 reseñas", 380,
+                new CardData("T-002", "Lago Titicaca", "Puno, Perú", "S/380", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 380,
                         4.7, Arrays.asList("Tours", "Relax"), Arrays.asList("Náutico", "Cultural"),
                         R.drawable.lagotiticaca, System.currentTimeMillis() - 3000000L),
-                new CardData("T-003", "Montaña de 7 Colores", "Cusco, Perú", "S/350", "★★★★☆", "4.6 • 190 reseñas", 350,
+                new CardData("T-003", "Montaña de 7 Colores", "Cusco, Perú", "S/350", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 350,
                         4.6, Arrays.asList("Tours", "Rutas"), Arrays.asList("Aventura", "Altura"),
                         R.drawable.montanacolores, System.currentTimeMillis() - 2000000L),
-                new CardData("H-101", "Cabañas en el Valle Sagrado", "Urubamba, Perú", "S/420", "★★★★★", "4.9 • 84 reseñas", 420,
+                new CardData("H-101", "Cabañas en el Valle Sagrado", "Urubamba, Perú", "S/420", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 420,
                         4.9, Arrays.asList("Cabañas", "Relax"), Arrays.asList("Familia", "Naturaleza"),
-                        R.drawable.montanacolores, System.currentTimeMillis() - 1000000L),
-                new CardData("A-550", "Ruta Gastronómica Limeña", "Lima, Perú", "S/180", "★★★★☆", "4.4 • 65 reseñas", 180,
+                        R.drawable.casa_valle_sagrado, System.currentTimeMillis() - 1000000L),
+                new CardData("A-550", "Ruta Gastronómica Limeña", "Lima, Perú", "S/180", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 180,
                         4.4, Arrays.asList("Alimentación", "Tours"), Arrays.asList("Gastronomía", "Cultural"),
-                        R.drawable.r, System.currentTimeMillis() - 7000000L)
+                        R.drawable.ruta_gastronomica_lime_a, System.currentTimeMillis() - 7000000L)
         );
     }
 
