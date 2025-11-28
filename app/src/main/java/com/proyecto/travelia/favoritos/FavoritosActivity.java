@@ -51,7 +51,7 @@ public class FavoritosActivity extends BaseActivity {
         rv.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int spacing = 12; // espaciado en dp
+                int spacing = getResources().getDimensionPixelSize(R.dimen.card_grid_spacing);
                 outRect.left = spacing;
                 outRect.right = spacing;
                 outRect.top = spacing;
