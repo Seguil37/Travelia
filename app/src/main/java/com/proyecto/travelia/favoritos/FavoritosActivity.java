@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.proyecto.travelia.BaseActivity;
 import com.proyecto.travelia.R;
 import com.proyecto.travelia.data.FavoritesRepository;
+import com.proyecto.travelia.data.ReviewRepository;
 import com.proyecto.travelia.data.local.FavoriteEntity;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 public class FavoritosActivity extends BaseActivity {
 
     private FavoritesRepository repo;
+    private ReviewRepository reviewRepository;
     private FavoritosAdapter adapter;
 
     @Override
@@ -40,6 +42,7 @@ public class FavoritosActivity extends BaseActivity {
 
         // Recycler
         repo = new FavoritesRepository(this);
+        reviewRepository = new ReviewRepository(this);
         RecyclerView rv = findViewById(R.id.rvFavoritos);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         rv.setLayoutManager(gridLayoutManager);
@@ -56,7 +59,7 @@ public class FavoritosActivity extends BaseActivity {
             }
         });
 
-        adapter = new FavoritosAdapter(repo, this);
+        adapter = new FavoritosAdapter(repo, reviewRepository, this, this);
         rv.setAdapter(adapter);
 
         // Observa cambios de Room en tiempo real

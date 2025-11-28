@@ -1,6 +1,7 @@
 package com.proyecto.travelia;
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -43,6 +44,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.proyecto.travelia.data.Constantes;
+import com.proyecto.travelia.data.ReviewRepository;
+import com.proyecto.travelia.data.TourData;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,8 +60,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class InicioActivity extends BaseActivity implements OnMapReadyCallback {
     private GoogleMap mMaps;
@@ -79,6 +85,10 @@ public class InicioActivity extends BaseActivity implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1001;
     private RequestQueue volleyQueue;
     private FirebaseFirestore db;
+    private ReviewRepository reviewRepository;
+    private final List<TourData.TourInfo> recommendedTours = new ArrayList<>();
+    private final Map<String, RatingSnapshot> ratingSnapshots = new HashMap<>();
+    private LinearLayout recommendationsContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,6 +155,9 @@ public class InicioActivity extends BaseActivity implements OnMapReadyCallback {
         findViewById(R.id.opt_normal).setOnClickListener(v -> changeMapType(GoogleMap.MAP_TYPE_NORMAL));
         findViewById(R.id.opt_satellite).setOnClickListener(v -> changeMapType(GoogleMap.MAP_TYPE_HYBRID));
         findViewById(R.id.opt_terrain).setOnClickListener(v -> changeMapType(GoogleMap.MAP_TYPE_TERRAIN));
+
+        reviewRepository = new ReviewRepository(this);
+        recommendationsContainer = findViewById(R.id.container_recomendaciones);
 
         // 4. Mapa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.mapa);
@@ -350,35 +363,85 @@ public class InicioActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     private void setupRecommendations() {
-        LinearLayout container = findViewById(R.id.container_recomendaciones);
+        recommendedTours.clear();
+        recommendedTours.addAll(TourData.getTours());
+
+        for (TourData.TourInfo info : recommendedTours) {
+            observeRating(info.id);
+        }
+
+        renderRecommendations();
+    }
+
+    private void observeRating(String tourId) {
+        if (tourId == null || ratingSnapshots.containsKey(tourId)) return;
+
+        reviewRepository.observeAverage(tourId).observe(this, avg -> {
+            RatingSnapshot snapshot = ratingSnapshots.computeIfAbsent(tourId, k -> new RatingSnapshot());
+            snapshot.average = avg != null ? avg : 0d;
+            snapshot.hasAverage = avg != null;
+            renderRecommendations();
+        });
+
+        reviewRepository.observeCount(tourId).observe(this, count -> {
+            RatingSnapshot snapshot = ratingSnapshots.computeIfAbsent(tourId, k -> new RatingSnapshot());
+            snapshot.count = count != null ? count : 0;
+            renderRecommendations();
+        });
+    }
+
+    private void renderRecommendations() {
+        if (recommendationsContainer == null) return;
+
         LayoutInflater inflater = LayoutInflater.from(this);
-        CardData[] items = new CardData[]{
-                new CardData("T-001", "Machu Picchu Full Day", "Cusco, Perú", "S/280", "★★★★☆", "4.8 • 230 reseñas", R.drawable.mapi),
-                new CardData("T-002", "Lago Titicaca", "Puno, Perú", "S/380", "★★★★☆", "4.7 • 156 reseñas", R.drawable.lagotiticaca),
-                new CardData("T-003", "Montaña de 7 Colores", "Cusco, Perú", "S/350", "★★★★☆", "4.6 • 190 reseñas", R.drawable.montanacolores)
-        };
-        for (CardData item : items) {
-            View card = inflater.inflate(R.layout.card_recomendacion, container, false);
+        recommendationsContainer.removeAllViews();
+
+        List<TourData.TourInfo> sorted = new ArrayList<>(recommendedTours);
+        Collections.sort(sorted, (a, b) -> Double.compare(getEffectiveRating(b), getEffectiveRating(a)));
+
+        for (TourData.TourInfo item : sorted) {
+            View card = inflater.inflate(R.layout.card_recomendacion, recommendationsContainer, false);
             ImageView iv = card.findViewById(R.id.iv_destino);
             TextView tvNombre = card.findViewById(R.id.tv_nombre_destino);
             TextView tvPrecio = card.findViewById(R.id.tv_precio);
-            iv.setImageResource(item.imagen);
-            tvNombre.setText(item.nombre);
-            tvPrecio.setText(item.precio);
-            card.setOnClickListener(v -> Toast.makeText(this, "Abrir: " + item.nombre, Toast.LENGTH_SHORT).show());
-            container.addView(card);
+            TextView tvPrecioBadge = card.findViewById(R.id.tv_precio_badge);
+
+            if (iv != null) iv.setImageResource(item.imageRes);
+            if (tvNombre != null) tvNombre.setText(item.title);
+            String priceText = item.formatPrice();
+            if (tvPrecio != null) tvPrecio.setText(priceText);
+            if (tvPrecioBadge != null) tvPrecioBadge.setText(priceText);
+
+            card.setOnClickListener(v -> openDetalle(item));
+            recommendationsContainer.addView(card);
         }
+    }
+
+    private double getEffectiveRating(TourData.TourInfo info) {
+        if (info == null) return 0d;
+        RatingSnapshot snapshot = ratingSnapshots.get(info.id);
+        if (snapshot != null && snapshot.hasAverage && snapshot.count > 0) return snapshot.average;
+        return info.defaultRating;
+    }
+
+    private void openDetalle(TourData.TourInfo info) {
+        Intent intent = new Intent(this, DetalleArticuloActivity.class);
+        intent.putExtra("id", info.id);
+        intent.putExtra("titulo", info.title);
+        intent.putExtra("ubicacion", info.location);
+        intent.putExtra("precio", info.formatPrice());
+        intent.putExtra("rating", String.format(Locale.getDefault(), "%.1f", getEffectiveRating(info)));
+        intent.putExtra("imageRes", info.imageRes);
+        startActivity(intent);
+    }
+
+    static class RatingSnapshot {
+        double average;
+        int count;
+        boolean hasAverage;
     }
 
     private void setupBottomNav() {
-    }
-
-    static class CardData {
-        String id, nombre, lugar, precio, estrellas, resumen;
-        int imagen;
-        CardData(String id, String nombre, String lugar, String precio, String estrellas, String resumen, int imagen) {
-            this.id = id; this.nombre = nombre; this.lugar = lugar; this.precio = precio; this.estrellas = estrellas; this.resumen = resumen; this.imagen = imagen;
-        }
     }
     // --- NUEVO MÉTODO: LEER DE FIREBASE Y PINTAR EN MAPA ---
     private void cargarPublicacionesEnMapa() {
