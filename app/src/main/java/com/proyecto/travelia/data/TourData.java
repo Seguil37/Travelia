@@ -17,7 +17,9 @@ public final class TourData {
     private static final List<TourInfo> TOURS = Collections.unmodifiableList(Arrays.asList(
             new TourInfo("T-001", "Machu Picchu Full Day", "Cusco, Perú", 280, 4.8, 230, R.drawable.mapi),
             new TourInfo("T-002", "Lago Titicaca", "Puno, Perú", 380, 4.7, 156, R.drawable.lagotiticaca),
-            new TourInfo("T-003", "Montaña de 7 Colores", "Cusco, Perú", 350, 4.6, 190, R.drawable.montanacolores)
+            new TourInfo("T-003", "Montaña de 7 Colores", "Cusco, Perú", 350, 4.6, 190, R.drawable.montanacolores),
+            new TourInfo("H-101", "Cabañas en el Valle Sagrado", "Urubamba, Perú", 420, 4.9, 0, R.drawable.casa_valle_sagrado),
+            new TourInfo("A-550", "Ruta Gastronómica Limeña", "Lima, Perú", 180, 4.4, 0, R.drawable.ruta_gastronomica_lime_a)
     ));
 
     public static List<TourInfo> getTours() {

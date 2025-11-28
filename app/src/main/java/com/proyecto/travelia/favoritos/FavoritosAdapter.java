@@ -184,6 +184,10 @@ public class FavoritosAdapter extends RecyclerView.Adapter<FavoritosAdapter.VH> 
                 return R.drawable.lagotiticaca;
             case "T-003": // Montaña de 7 Colores
                 return R.drawable.montanacolores;
+            case "H-101": // Cabañas Valle Sagrado
+                return R.drawable.casa_valle_sagrado;
+            case "A-550": // Ruta Gastronómica Limeña
+                return R.drawable.ruta_gastronomica_lime_a;
             default:
                 return R.drawable.mapi; // placeholder genérico si no coincide
         }

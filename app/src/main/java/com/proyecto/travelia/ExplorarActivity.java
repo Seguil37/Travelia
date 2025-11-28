@@ -26,6 +26,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.proyecto.travelia.data.FavoritesRepository;
 import com.proyecto.travelia.data.ReviewRepository;
+import com.proyecto.travelia.data.TourData;
 import com.proyecto.travelia.data.local.FavoriteEntity;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class ExplorarActivity extends BaseActivity {
     private final Set<String> selectedTags = new HashSet<>();
     private final List<CardData> allCards = new ArrayList<>();
     private final Map<String, RatingSnapshot> ratingSnapshots = new HashMap<>();
+    private static final Map<String, CardExtras> CARD_EXTRAS = createCardExtras();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,23 +156,43 @@ public class ExplorarActivity extends BaseActivity {
 
     private void seedCards() {
         allCards.clear();
-        Collections.addAll(allCards,
-                new CardData("T-001", "Machu Picchu Full Day", "Cusco, Perú", "S/280", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 280,
-                        4.8, Arrays.asList("Tours", "Rutas"), Arrays.asList("Aventura", "Cultural"),
-                        R.drawable.mapi, System.currentTimeMillis() - 5000000L),
-                new CardData("T-002", "Lago Titicaca", "Puno, Perú", "S/380", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 380,
-                        4.7, Arrays.asList("Tours", "Relax"), Arrays.asList("Náutico", "Cultural"),
-                        R.drawable.lagotiticaca, System.currentTimeMillis() - 3000000L),
-                new CardData("T-003", "Montaña de 7 Colores", "Cusco, Perú", "S/350", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 350,
-                        4.6, Arrays.asList("Tours", "Rutas"), Arrays.asList("Aventura", "Altura"),
-                        R.drawable.montanacolores, System.currentTimeMillis() - 2000000L),
-                new CardData("H-101", "Cabañas en el Valle Sagrado", "Urubamba, Perú", "S/420", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 420,
-                        4.9, Arrays.asList("Cabañas", "Relax"), Arrays.asList("Familia", "Naturaleza"),
-                        R.drawable.casa_valle_sagrado, System.currentTimeMillis() - 1000000L),
-                new CardData("A-550", "Ruta Gastronómica Limeña", "Lima, Perú", "S/180", "☆☆☆☆☆", "0.0 • 0 sin reseñas", 180,
-                        4.4, Arrays.asList("Alimentación", "Tours"), Arrays.asList("Gastronomía", "Cultural"),
-                        R.drawable.ruta_gastronomica_lime_a, System.currentTimeMillis() - 7000000L)
-        );
+
+        for (TourData.TourInfo info : TourData.getTours()) {
+            CardExtras extras = CARD_EXTRAS.get(info.id);
+            List<String> categorias = extras != null ? extras.categorias : Collections.emptyList();
+            List<String> tags = extras != null ? extras.tags : Collections.emptyList();
+            long createdAt = extras != null ? extras.createdAt : System.currentTimeMillis();
+
+            allCards.add(new CardData(
+                    info.id,
+                    info.title,
+                    info.location,
+                    info.formatPrice(),
+                    "☆☆☆☆☆",
+                    defaultRatingText(info),
+                    info.price,
+                    info.defaultRating,
+                    categorias,
+                    tags,
+                    info.imageRes,
+                    createdAt
+            ));
+        }
+    }
+
+    private static Map<String, CardExtras> createCardExtras() {
+        Map<String, CardExtras> map = new HashMap<>();
+        map.put("T-001", new CardExtras(Arrays.asList("Tours", "Rutas"),
+                Arrays.asList("Aventura", "Cultural"), System.currentTimeMillis() - 5_000_000L));
+        map.put("T-002", new CardExtras(Arrays.asList("Tours", "Relax"),
+                Arrays.asList("Náutico", "Cultural"), System.currentTimeMillis() - 3_000_000L));
+        map.put("T-003", new CardExtras(Arrays.asList("Tours", "Rutas"),
+                Arrays.asList("Aventura", "Altura"), System.currentTimeMillis() - 2_000_000L));
+        map.put("H-101", new CardExtras(Arrays.asList("Cabañas", "Relax"),
+                Arrays.asList("Familia", "Naturaleza"), System.currentTimeMillis() - 1_000_000L));
+        map.put("A-550", new CardExtras(Arrays.asList("Alimentación", "Tours"),
+                Arrays.asList("Gastronomía", "Cultural"), System.currentTimeMillis() - 7_000_000L));
+        return Collections.unmodifiableMap(map);
     }
 
     private void observeReviewStats() {
@@ -356,6 +378,14 @@ public class ExplorarActivity extends BaseActivity {
         return card.ratingTxt;
     }
 
+    private String defaultRatingText(TourData.TourInfo info) {
+        if (info.defaultReviewCount > 0) {
+            String label = info.defaultReviewCount == 1 ? "reseña" : "reseñas";
+            return String.format(Locale.getDefault(), "%.1f • %d %s", info.defaultRating, info.defaultReviewCount, label);
+        }
+        return "Sin reseñas";
+    }
+
     private String formatStars(CardData card) {
         double rating = getEffectiveRating(card);
         int filledStars = (int) Math.round(rating);
@@ -450,6 +480,18 @@ public class ExplorarActivity extends BaseActivity {
             this.precioValor = precioValor; this.ratingValor = ratingValor;
             this.categorias = categorias; this.tags = tags;
             this.imageRes = img; this.createdAt = createdAt;
+        }
+    }
+
+    static class CardExtras {
+        final List<String> categorias;
+        final List<String> tags;
+        final long createdAt;
+
+        CardExtras(List<String> categorias, List<String> tags, long createdAt) {
+            this.categorias = categorias;
+            this.tags = tags;
+            this.createdAt = createdAt;
         }
     }
 
